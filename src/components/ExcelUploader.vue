@@ -5,12 +5,14 @@
 
 <script>
 import XLSX from 'xlsx';
+import { mapActions } from 'vuex';
 
 export default {
 
     name: 'ExcelUploader',
 
     methods: {
+        ...mapActions(['addCardsFromSheet']),
         triggerFileUpload() {
         document.getElementById('fileUpload').click();
         },
@@ -33,32 +35,17 @@ export default {
                 const sheetName = workbook.SheetNames[0];
                 const sheetObj = workbook.Sheets[sheetName];
                 const sheetJSON = XLSX.utils.sheet_to_json(sheetObj);
-                const sheetData = sheetJSON.map(row => {
-                    if (row.CardType !== 'multiple-choice') {
-                        return row
-                        }
-
-                    row.choices = [];
-                    Object.keys(row).forEach(key => {
-                        const isChoice = /(Choice|choice)\d$/.test(key);
-
-                        if (isChoice) {
-                            row.choices.push(row[key])
-
-                            delete row[key];
-                        }
-                    });
-
-                    return row;
-                })
-
-                console.log("Read results", sheetData);
+                console.log(sheetJSON)
+                this.addCardsFromSheet(sheetJSON);
                 } catch (e) {
                 return alert("Read failure!");
                 }
             };
             fileReader.readAsBinaryString(files[0]);
         }
+    },
+    mounted() {
+        console.log('l48', this.$state.cards)
     }
 }
 </script>
