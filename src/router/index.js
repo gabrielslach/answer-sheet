@@ -8,7 +8,7 @@ import TeacherDashboard from '../components/TeacherDashboard';
 
 const routes = [
     {
-        path: '/',
+        path: '/:sectionName/:activityName',
         name: 'deck',
         component: CardDeck
     },

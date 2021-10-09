@@ -47,6 +47,9 @@ export default {
         that.upsertAnswer({questionID, answer});
       }
     }
+  },
+  mounted() {
+    console.log('l55', this.$route.params);
   }
 }
 </script>
