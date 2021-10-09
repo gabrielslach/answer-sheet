@@ -3,7 +3,7 @@ const cardModule = {
         cards:[]
     }),
     mutations: {
-        addCards (state, newCards) {
+        addCards: (state, newCards) => {
             console.log('adding', newCards);
             state.cards = [
                 ...state.cards,

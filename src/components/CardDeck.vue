@@ -40,9 +40,12 @@ export default {
     ...mapGetters(['getCards'])
   },
   methods: {
-    ...mapActions(['recordAnswer']),
-    inputCallback: (questionID) => (ans) => {
-      this.recordAnswer(questionID, ans);
+    ...mapActions(['upsertAnswer']),
+    inputCallback (questionID) {
+      const that = this;
+      return function (answer) {
+        that.upsertAnswer({questionID, answer});
+      }
     }
   }
 }
