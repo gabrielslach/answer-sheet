@@ -9,21 +9,18 @@
         </q-toolbar>
       </q-header>
     <q-page-container>
-      <CardDeck />
+      <router-view></router-view>
     </q-page-container>
   </q-layout>
 </template>
 
 <script>
-import CardDeck from './components/CardDeck.vue';
 import ExcelUploader from './components/ExcelUploader.vue';
-
 
 export default {
   name: 'LayoutDefault',
 
   components: {
-    CardDeck,
     ExcelUploader
   },
 }
