@@ -28,24 +28,22 @@ export default {
             const fileReader = new FileReader();
             fileReader.onload = e => {
                 try {
-                const data = e.target.result;
-                const workbook = XLSX.read(data, {
-                    type: "binary"
-                });
-                const sheetName = workbook.SheetNames[0];
-                const sheetObj = workbook.Sheets[sheetName];
-                const sheetJSON = XLSX.utils.sheet_to_json(sheetObj);
-                console.log(sheetJSON)
-                this.addCardsFromSheet(sheetJSON);
+                    const data = e.target.result;
+                    const workbook = XLSX.read(data, {
+                        type: "binary"
+                    });
+                    const sheetName = workbook.SheetNames[0];
+                    const sheetObj = workbook.Sheets[sheetName];
+                    const sheetJSON = XLSX.utils.sheet_to_json(sheetObj);
+                    
+                    this.addCardsFromSheet(sheetJSON);
                 } catch (e) {
-                return alert("Read failure!");
+                    console.log(e)
+                    return alert("Read failure!");
                 }
             };
             fileReader.readAsBinaryString(files[0]);
         }
-    },
-    mounted() {
-        console.log('l48', this.$state.cards)
     }
 }
 </script>

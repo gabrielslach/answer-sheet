@@ -1,6 +1,6 @@
 const cardModule = {
     state: () => ({
-        cards:{}
+        cards:[]
     }),
     mutations: {
         addCards (state, newCards) {
@@ -12,9 +12,10 @@ const cardModule = {
         },
     },
     actions: {
-        addCardsFromSheet: ({commit}) => sheetJSON => {
-            console.log('hillo',sheetJSON)
-            const sheetData = sheetJSON.map(row => {
+        addCardsFromSheet: ({commit}, sheetJSON) => {
+            const sheetData = sheetJSON.map((row, index) => {
+                row.id = index;
+
                 if (row.CardType !== 'multiple-choice') {
                     return row
                     }

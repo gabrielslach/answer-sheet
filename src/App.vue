@@ -3,7 +3,6 @@
     <q-header reveal elevated>
         <q-toolbar>
           <q-btn flat round dense icon="menu" class="q-mr-sm" />
-
           <q-toolbar-title>Answer Sheet</q-toolbar-title>
 
           <ExcelUploader/>
