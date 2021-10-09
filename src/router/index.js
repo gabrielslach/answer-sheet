@@ -1,15 +1,21 @@
 import {createRouter, createWebHistory} from 'vue-router';
 
 import CardDeck from '../components/CardDeck';
-import Login from '../components/Login'
+import Login from '../components/Login';
+import TeacherDashboard from '../components/TeacherDashboard';
 
-import store from '../store';
+// import store from '../store';
 
 const routes = [
     {
         path: '/',
         name: 'deck',
         component: CardDeck
+    },
+    {
+        path: '/dashboard',
+        name: 'dashboard',
+        component: TeacherDashboard
     },
     {
         path: '/auth',
@@ -23,18 +29,18 @@ const router = createRouter({
     routes,
   });
 
-router.beforeEach((to, from, next) => {
-    if (to.name !== 'auth') {
-        const userInfo = store.getters.getUser;
-        if (!userInfo.authToken) {
-            return next({
-                replace: true,
-                name: 'auth'
-            })
-        }
-    }
+// router.beforeEach((to, from, next) => {
+//     if (to.name !== 'auth') {
+//         const userInfo = store.getters.getUser;
+//         if (!userInfo.authToken) {
+//             return next({
+//                 replace: true,
+//                 name: 'auth'
+//             })
+//         }
+//     }
 
-    next();
-})
+//     next();
+// })
 
 export default router;
