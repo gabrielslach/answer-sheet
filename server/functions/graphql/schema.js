@@ -51,6 +51,7 @@ const typeDefs = `
 
     type Query {
         login(name: String): UserInfo!
+        getCardDeck(sheetInfo: SheetInfo): [Card]!
     }
 
     type Mutation {
