@@ -1,14 +1,22 @@
 const typeDefs = `
-    type Query {
-        getCards(sheetInfo: SheetInfo): [Card]
-        getAnswersOfUser(sheetInfo: SheetInfo, userID: String): [Answers]
+
+    ### USER
+
+    input UserInput {
+        name: String!
+        userType: String!
+        section: String
     }
 
-    type Mutation {
-        addCards(cards: [Card]): String!
-        addAnswers(sheetInfo: SheetInfo, answers: [Answer]): String!
-        addUser(userInfo: User): String!
+    type UserInfo {
+        id: String!
+        name: String!
+        userType: String!
+        section: String
+        authToken: String!
     }
+
+    ### CARD
 
     type Card {
         CardType: String!
@@ -17,22 +25,38 @@ const typeDefs = `
         Choices: [String]
     }
 
-    type Answer {
+    input CardInput {
+        CardType: String!
+        Description: String!
+        CorrectAnswer: String
+        Choices: [String]
+    }
+
+    ### ANSWER
+
+    input Answer {
         questionID: String
         answer: String
     }
 
-    type SheetInfo {
-        teacherID,
-        sectionID,
-        activityID
+    ### SHEET INFO
+
+    input SheetInfo {
+        teacherID: String
+        sectionID: String
+        activityID: String
     }
 
-    type User {
-        id: String
-        name: String
-        userType: String
-        section: String
+    ##############
+
+    type Query {
+        login(name: String): UserInfo!
+    }
+
+    type Mutation {
+        addSheet(sheetInfo: SheetInfo, cards: [CardInput]): String!
+        addSubmission(userID: String, sheetInfo: SheetInfo, answers: [Answer]): String!
+        addUser(userInfo: UserInput): String!
     }
 `;
 
