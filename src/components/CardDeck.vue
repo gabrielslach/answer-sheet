@@ -9,7 +9,7 @@
       <SelectCard 
         v-if="card.CardType === 'multiple-choice'"
         :description="card.Description"
-        :choices="card.choices"
+        :choices="card.Choices"
         :callback="inputCallback(card.id)"
         />
       <TextAreaCard 
@@ -18,7 +18,7 @@
         :callback="inputCallback(card.id)"
         />
     </div>
-    <q-btn push color="primary" label="Submit" size='lg' class='q-mt-md' />
+    <q-btn push color="primary" label="Upload Sheet" size='lg' class='q-mt-md' @click="uploadSheet" />
   </q-page>
 </template>
 
@@ -28,7 +28,6 @@ import TextAreaCard from './Cards/TextAreaCard';
 import SelectCard from './Cards/SelectCard';
 
 import { mapGetters, mapActions } from 'vuex';
-import gql from 'graphql-tag';
 
 export default {
   name: 'CardDeck',
@@ -38,51 +37,25 @@ export default {
     SelectCard
   },
   computed: {
-    ...mapGetters(['getCards'])
+    ...mapGetters(['cardDeck'])
   },
   methods: {
-    ...mapActions(['upsertAnswer']),
+    ...mapActions(['upsertAnswer', 'fetchCards', 'uploadCards']),
     inputCallback (questionID) {
       const that = this;
       return function (answer) {
         that.upsertAnswer({questionID, answer});
       }
+    },
+    uploadSheet () {
+      const {sectionName, activityName} = this.$route.params;
+      this.uploadCards({teacherID: '001', sectionID: sectionName, activityID: activityName})
     }
   },
   mounted() {
-    console.log('l55', this.$route.params);
+    const {sectionName, activityName} = this.$route.params;
+    this.fetchCards({teacherID: '001', sectionID: sectionName, activityID: activityName});
   },
-  apollo: {
-    cardDeck: {
-      query: gql`query cardDeckCall($sectionID: String!, $activityID: String!) {
-        cardDeck: getCardDeck(sheetInfo: {
-          teacherID:"001",
-          sectionID: $sectionID,
-          activityID: $activityID
-        }) {
-          CardType,
-          Description,
-          CorrectAnswer,
-          Choices,
-        }
-      }`,
-      variables() {
-        const {
-          sectionName,
-          activityName
-        } = this.$route.params;
-        return {
-          sectionID: sectionName,
-          activityID: activityName
-        }
-      }
-    }
-  },
-  data() {
-    return {
-      cardDeck: []
-    }
-  }
 }
 </script>
 
