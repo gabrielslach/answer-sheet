@@ -8,7 +8,7 @@
       <q-card-section>
         <q-input
           filled
-          v-model="username"
+          v-model="email"
           label="Username *"
           lazy-rules
           :rules="[ val => val && val.length > 0 || 'This field is required.']"
@@ -36,31 +36,28 @@
 <script>
 import { ref } from 'vue';
 import {useRouter} from 'vue-router';
-import {mapActions, useStore} from 'vuex';
+import {useStore} from 'vuex';
 
 export default {
-  methods: {
-    ...mapActions(['login'])
-  },
   setup () {
     const store = useStore();
     
     const router = useRouter();
     
-    const username = ref(null);
+    const email = ref(null);
     const password = ref(null);
 
     return {
-      username,
+      email,
       password,
 
       onSubmit () {
-        store.dispatch('login',{username: username.value, password: password.value})
+        store.dispatch('login',{email: email.value, password: password.value})
         router.replace({path: '/'})
       },
 
       onReset () {
-        username.value = null
+        email.value = null
         password.value = null
       }
     }

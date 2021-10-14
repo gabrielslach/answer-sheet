@@ -6,6 +6,7 @@
           <q-toolbar-title>{{ this.$store.state.appTitle }}</q-toolbar-title>
 
           <ExcelUploader/>
+          <q-btn outline flat stack style="color: white;" icon="logout" label='Logout' class="q-ml-lg" @click="handleLogout" />
         </q-toolbar>
       </q-header>
     <q-page-container>
@@ -16,6 +17,7 @@
 
 <script>
 import ExcelUploader from './components/ExcelUploader.vue';
+import {useStore} from 'vuex';
 
 export default {
   name: 'LayoutDefault',
@@ -23,5 +25,15 @@ export default {
   components: {
     ExcelUploader
   },
+
+  setup() {
+    const store = useStore();
+
+    const handleLogout = () => store.dispatch("logout");
+
+    return {
+      handleLogout
+    }
+  }
 }
 </script>

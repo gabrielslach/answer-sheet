@@ -1,12 +1,14 @@
+import { getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
+
 const answersModule = {
     state: () => ({
         userInfo:{
             id: '',
             name: '',
             userType: '',
-            section: '',
-            authToken: ''
-        }
+            section: ''
+        },
+        authToken: localStorage.getItem('authToken') || ''
     }),
     mutations: {
         setUserInfo: (state, userInfo) => {
@@ -16,13 +18,21 @@ const answersModule = {
                     state.userInfo[key] = userInfo[key];
                     }
             }
+        },
+        setAuthToken: (state, authToken) => {
+            state.authToken = authToken;
         }
     },
     actions: {
-        login: async ({commit}, {username, password}) => {
-            //POST with username and password
-            console.log('POST with', username, password);
-            //backend will return these details
+        login: async ({commit}, {email, password}) => {
+            const auth = getAuth();
+            signInWithEmailAndPassword(auth, email, password)
+                .then((data) => {
+                    console.log(data);
+                }).catch( err => {
+                    console.log('Auth error', err);
+                })
+                
             const userInfo = {
                 id: '11322',
                 name: 'Drix Lopez',
@@ -32,9 +42,23 @@ const answersModule = {
             };
             commit('setUserInfo', userInfo);
         },
+        logout: async () => {
+            const auth = getAuth();
+            try {
+                await signOut(auth);
+                localStorage.removeItem('authToken');
+            } catch (error) {
+                console.log('Signout error.')
+            }
+        },
+        setAuthToken: async ({commit}, authToken) => {
+            commit('setAuthToken', authToken);
+            localStorage.setItem('authToken', authToken);
+        }
     },
     getters: {
-        getUser: (state) => state.userInfo
+        getUser: (state) => state.userInfo,
+        getAuthToken: state => state.authToken
     }
 };
 

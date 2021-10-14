@@ -6,6 +6,10 @@ import router from './router'
 import store from './store'
 import apolloProvider from './apollo'
 
+import firebaseInit from './firebase'
+
+firebaseInit();
+
 const app = createApp(App)
 app.use(Quasar, quasarUserOptions)
 app.use(store)
