@@ -26,12 +26,12 @@ const cardModule = {
                     return row
                     }
 
-                row.choices = [];
+                row.Choices = [];
                 Object.keys(row).forEach(key => {
                     const isChoice = /(Choice|choice)\d$/.test(key);
 
                     if (isChoice) {
-                        row.choices.push(row[key])
+                        row.Choices.push(row[key])
 
                         delete row[key];
                     }
