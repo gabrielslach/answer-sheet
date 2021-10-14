@@ -52,6 +52,9 @@ const typeDefs = `
     type Query {
         login(name: String): UserInfo!
         getCardDeck(sheetInfo: SheetInfo): [Card]!
+        getTeachers: [String]!
+        getSections(teacherID: String!): [String]!
+        getActivities(teacherID: String!, sectionID: String!): [String]!
     }
 
     type Mutation {

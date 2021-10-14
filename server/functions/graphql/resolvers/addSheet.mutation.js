@@ -10,13 +10,13 @@ const addSheet = (db) => async (_, {sheetInfo, cards}) => {
             cards
         };
 
-        const addActivityResp = await db.collection('teachers')
-            .doc(teacherID)
-            .collection('sections')
-            .doc(sectionID)
-            .collection('activities')
-            .doc(activityID)
-            .set(activityObj);
+        const teacherRef = db.collection('teachers').doc(teacherID);
+        const sectionRef = teacherRef.collection('sections').doc(sectionID);
+        const activityRef = sectionRef.collection('activities').doc(activityID);
+
+        await teacherRef.set({});
+        await sectionRef.set({});
+        const addActivityResp = await activityRef.set(activityObj);
 
         return JSON.stringify(addActivityResp);
     } catch (err) {
