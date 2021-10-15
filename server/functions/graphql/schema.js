@@ -6,6 +6,13 @@ const typeDefs = `
         name: String!
         userType: String!
         section: String
+        uid: String!
+    }
+
+    input AddUserInput {
+        name: String!,
+        teacher: String,
+        section: String
     }
 
     type UserInfo {

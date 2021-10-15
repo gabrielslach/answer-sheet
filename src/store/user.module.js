@@ -1,9 +1,9 @@
-import { getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword } from "firebase/auth";
 
 const answersModule = {
     state: () => ({
         userInfo:{
-            id: '',
+            uid: '',
             name: '',
             userType: '',
             section: ''
@@ -24,6 +24,20 @@ const answersModule = {
         }
     },
     actions: {
+        addUserToAuth: async ({commit, dispatch}, {email, password, name, teacher, section}) => {
+            try {
+                const auth = getAuth();
+                const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
+
+                commit('setUserInfo', {uid: userCredentials.user.uid})
+                dispatch('addUserToDB', {uid: userCredentials.user.uid, name, teacher, section})
+            } catch (error) {
+                alert(JSON.stringify(error));
+            }
+        },
+        addUserToDB: async (_, {uid, name, teacher, section}) => {
+            console.log(uid, name, teacher, section);
+        },
         login: async ({commit}, {email, password}) => {
             const auth = getAuth();
             signInWithEmailAndPassword(auth, email, password)
@@ -32,14 +46,9 @@ const answersModule = {
                 }).catch( err => {
                     console.log('Auth error', err);
                 })
+
+            const userInfo = {};
                 
-            const userInfo = {
-                id: '11322',
-                name: 'Drix Lopez',
-                userType: 'student',
-                section: 'BTC',
-                authToken: '123213'
-            };
             commit('setUserInfo', userInfo);
         },
         logout: async () => {

@@ -4,11 +4,10 @@ const addUser = db => async (_, {userInfo}) => {
         const userObj = {
             name: userInfo.name,
             userType: userInfo.userType,
-            section: userInfo.section
+            section: userInfo.section,
+            uid: userInfo.uid
         }
-        const userRef = db.collection('users').doc();
-
-        userObj.id = userRef.id;
+        const userRef = db.collection('users').doc(userInfo.uid);
 
         const addUserResp = await userRef.set(userObj)
         
