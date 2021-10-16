@@ -1,5 +1,6 @@
 import { getAuth, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword } from "firebase/auth";
 import { apolloClient } from "../apollo";
+import addUserQuery from "../apollo/mutations/addUser";
 import getSectionsQuery from "../apollo/queries/getSections";
 import getTeachersQuery from "../apollo/queries/getTeachers";
 
@@ -13,7 +14,8 @@ const answersModule = {
         },
         teachers: [],
         sections: [],
-        authToken: localStorage.getItem('authToken') || ''
+        authToken: localStorage.getItem('authToken') || '',
+        isLoading: false
     }),
     mutations: {
         setUserInfo: (state, userInfo) => {
@@ -32,30 +34,47 @@ const answersModule = {
         },
         setSections: (state, sections) => {
             state.sections = sections;
+        },
+        setLoading: (state, isLoading) => {
+            state.isLoading = isLoading;
         }
     },
     actions: {
         addUserToAuth: async ({commit, dispatch}, {email, password, name, teacher, section}) => {
             try {
+                commit('setLoading', true);
                 const auth = getAuth();
                 const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
 
-                commit('setUserInfo', {uid: userCredentials.user.uid})
-                dispatch('addUserToDB', {uid: userCredentials.user.uid, name, teacher, section})
+                commit('setUserInfo', {uid: userCredentials.user.uid});
+                commit('setLoading', false);
+                dispatch('addUserToDB', {uid: userCredentials.user.uid, name, teacher, section});
             } catch (error) {
                 alert(JSON.stringify(error));
+                commit('setLoading', false);
             }
         },
         addUserToDB: async (_, {uid, name, teacher, section}) => {
-            console.log(uid, name, teacher, section);
+            try {
+                commit('setLoading', true);
+                const dbResp = await apolloClient.mutate(addUserQuery(name, uid, teacher, section));
+                alert(JSON.stringify(dbResp));
+                commit('setLoading', false);
+            } catch (error) {
+                alert(JSON.stringify(error));
+                commit('setLoading', false);
+            }
         },
         login: async ({commit}, {email, password}) => {
+            commit('setLoading', true);
             const auth = getAuth();
             signInWithEmailAndPassword(auth, email, password)
                 .then((data) => {
                     console.log(data);
                 }).catch( err => {
                     console.log('Auth error', err);
+                }).finally(()=>{
+                    commit('setLoading', false);
                 })
 
             const userInfo = {};

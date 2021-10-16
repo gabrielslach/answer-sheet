@@ -98,9 +98,8 @@ export default {
 
     watch(teacher, (val) => {
       store.dispatch('fetchSections', val);
+      section.value = null;
     })
-
-    watch(teachers, val => console.log('teachers',val))
 
     return {
       email,
