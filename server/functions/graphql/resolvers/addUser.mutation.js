@@ -1,10 +1,10 @@
 const addUser = db => async (_, {userInfo}) => {
     try {
-        console.log('ey')
         const userObj = {
             name: userInfo.name,
-            userType: userInfo.userType,
-            section: userInfo.section,
+            userType: 'Student',
+            teacherID: userInfo.teacherID,
+            sectionID: userInfo.sectionID,
             uid: userInfo.uid
         }
         const userRef = db.collection('users').doc(userInfo.uid);

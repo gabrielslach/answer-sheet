@@ -4,15 +4,9 @@ const typeDefs = `
 
     input UserInput {
         name: String!
-        userType: String!
-        section: String
+        teacherID: String
+        sectionID: String
         uid: String!
-    }
-
-    input AddUserInput {
-        name: String!,
-        teacher: String,
-        section: String
     }
 
     type UserInfo {

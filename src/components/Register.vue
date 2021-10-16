@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { ref, watch, computed } from 'vue';
 //import {useRouter} from 'vue-router';
 import {useStore} from 'vuex';
 
@@ -83,10 +83,24 @@ export default {
     const name = ref(null);
     const teacher = ref(null);
     const section = ref(null);
-    const teachers = ref([]);
-    const sections = ref([]);
 
     const step = ref(1);
+
+    store.dispatch('fetchTeachers');
+
+    const teachers = computed(
+      ()=>store.getters.getTeachers
+    );
+
+    const sections = computed(
+      ()=>store.getters.getSections
+    )
+
+    watch(teacher, (val) => {
+      store.dispatch('fetchSections', val);
+    })
+
+    watch(teachers, val => console.log('teachers',val))
 
     return {
       email,
@@ -101,7 +115,10 @@ export default {
       onSubmit () {
         store.dispatch('addUserToAuth',{
           email: email.value, 
-          password: password.value
+          password: password.value,
+          name: name.value, 
+          teacher: teacher.value, 
+          section: section.value
           });
       },
 

@@ -1,4 +1,7 @@
 import { getAuth, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword } from "firebase/auth";
+import { apolloClient } from "../apollo";
+import getSectionsQuery from "../apollo/queries/getSections";
+import getTeachersQuery from "../apollo/queries/getTeachers";
 
 const answersModule = {
     state: () => ({
@@ -8,6 +11,8 @@ const answersModule = {
             userType: '',
             section: ''
         },
+        teachers: [],
+        sections: [],
         authToken: localStorage.getItem('authToken') || ''
     }),
     mutations: {
@@ -21,6 +26,12 @@ const answersModule = {
         },
         setAuthToken: (state, authToken) => {
             state.authToken = authToken;
+        },
+        setTeachers: (state, teachers) => {
+            state.teachers = teachers;
+        },
+        setSections: (state, sections) => {
+            state.sections = sections;
         }
     },
     actions: {
@@ -63,11 +74,28 @@ const answersModule = {
         setAuthToken: async ({commit}, authToken) => {
             commit('setAuthToken', authToken);
             localStorage.setItem('authToken', authToken);
-        }
+        },
+        fetchTeachers: async ({commit}) => {
+            const { data } = await apolloClient.query(getTeachersQuery());
+            const { teachers } = data;
+
+            commit("setTeachers", teachers);
+        },
+        fetchSections: async ({commit}, teacherID) => {
+            if (!teacherID || teacherID.length < 1) {
+                return commit("setSections", []);
+            }
+            const { data } = await apolloClient.query(getSectionsQuery(teacherID));
+            const { sections } = data;
+
+            commit("setSections", sections);
+        },
     },
     getters: {
         getUser: (state) => state.userInfo,
-        getAuthToken: state => state.authToken
+        getAuthToken: state => state.authToken,
+        getTeachers: state => state.teachers,
+        getSections: state => state.sections
     }
 };
 
