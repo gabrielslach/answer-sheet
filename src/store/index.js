@@ -3,6 +3,7 @@ import { createStore } from 'vuex';
 import cards from './cards.module';
 import answers from './answers.module';
 import user from './user.module';
+import sheets from './sheets.module';
 
 export default createStore({
     state: () => ({
@@ -11,7 +12,8 @@ export default createStore({
     modules: {
         cards,
         answers,
-        user
+        user,
+        sheets
     }
 });
 

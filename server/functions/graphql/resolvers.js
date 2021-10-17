@@ -11,13 +11,15 @@ const getCardDeck = require('./resolvers/getCardDeck.query');
 const getTeachers = require('./resolvers/getTeachers.query');
 const getSections = require('./resolvers/getSections.query');
 const getActivities = require('./resolvers/getActivities.query');
+const getActivitiesOfTeacher = require('./resolvers/getActivitiesOfTeacher.query');
 
 const Query = {
     login: login(db),
     getCardDeck: getCardDeck(db),
     getTeachers: getTeachers(db),
     getSections: getSections(db),
-    getActivities: getActivities(db)
+    getActivities: getActivities(db),
+    getActivitiesOfTeacher: getActivitiesOfTeacher(db)
 };
 
 const Mutation = {

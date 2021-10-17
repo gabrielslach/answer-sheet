@@ -54,7 +54,7 @@ const answersModule = {
                 commit('setLoading', false);
             }
         },
-        addUserToDB: async (_, {uid, name, teacher, section}) => {
+        addUserToDB: async ({commit}, {uid, name, teacher, section}) => {
             try {
                 commit('setLoading', true);
                 const dbResp = await apolloClient.mutate(addUserQuery(name, uid, teacher, section));
