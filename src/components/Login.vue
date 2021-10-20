@@ -35,14 +35,11 @@
 
 <script>
 import { ref } from 'vue';
-import {useRouter} from 'vue-router';
 import {useStore} from 'vuex';
 
 export default {
   setup () {
     const store = useStore();
-    
-    const router = useRouter();
     
     const email = ref(null);
     const password = ref(null);
@@ -53,7 +50,6 @@ export default {
 
       onSubmit () {
         store.dispatch('login',{email: email.value, password: password.value})
-        router.replace({path: '/'})
       },
 
       onReset () {

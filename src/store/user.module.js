@@ -3,14 +3,17 @@ import { apolloClient } from "../apollo";
 import addUserQuery from "../apollo/mutations/addUser";
 import getSectionsQuery from "../apollo/queries/getSections";
 import getTeachersQuery from "../apollo/queries/getTeachers";
+import getUserQuery from "../apollo/queries/getUser";
 
 const answersModule = {
     state: () => ({
         userInfo:{
             uid: '',
             name: '',
-            userType: '',
-            section: ''
+            email: '',
+            userType: localStorage.getItem('userType') || '',
+            teacherID: '',
+            sectionID: ''
         },
         teachers: [],
         sections: [],
@@ -19,7 +22,6 @@ const answersModule = {
     }),
     mutations: {
         setUserInfo: (state, userInfo) => {
-            console.log(userInfo)
             for (let key of Object.keys(state.userInfo)) {
                 if (userInfo[key]) {
                     state.userInfo[key] = userInfo[key];
@@ -65,12 +67,12 @@ const answersModule = {
                 commit('setLoading', false);
             }
         },
-        login: async ({commit}, {email, password}) => {
+        login: async ({commit, dispatch}, {email, password}) => {
             commit('setLoading', true);
             const auth = getAuth();
             signInWithEmailAndPassword(auth, email, password)
-                .then((data) => {
-                    console.log(data);
+                .then(() => {
+                    dispatch('fetchUserInfo');
                 }).catch( err => {
                     console.log('Auth error', err);
                 }).finally(()=>{
@@ -86,6 +88,7 @@ const answersModule = {
             try {
                 await signOut(auth);
                 localStorage.removeItem('authToken');
+                localStorage.removeItem('userType');
             } catch (error) {
                 console.log('Signout error.')
             }
@@ -109,6 +112,13 @@ const answersModule = {
 
             commit("setSections", sections);
         },
+        fetchUserInfo: async ({commit}) => {
+            const { data } = await apolloClient.query(getUserQuery());
+            const { userInfo } = data;
+
+            localStorage.setItem('userType', userInfo.userType);
+            commit('setUserInfo', userInfo);
+        }
     },
     getters: {
         getUser: (state) => state.userInfo,

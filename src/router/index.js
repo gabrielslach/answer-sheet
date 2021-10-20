@@ -5,8 +5,9 @@ import Login from '../components/Login';
 import TeacherDashboard from '../components/TeacherDashboard';
 import Register from '../components/Register';
 import Home from '../components/Home';
+import StudentDashboard from '../components/StudentDashboard';
 
-// import store from '../store';
+import store from '../store';
 
 const routes = [
     {
@@ -21,7 +22,7 @@ const routes = [
     },
     {
         path: '/dashboard',
-        name: 'dashboard',
+        name: 'teacherDashboard',
         component: TeacherDashboard
     },
     {
@@ -33,6 +34,11 @@ const routes = [
         path: '/register',
         name: 'register',
         component: Register
+    },
+    {
+        path: '/student',
+        name: 'studentDashboard',
+        component: StudentDashboard
     }
 ];
 
@@ -41,18 +47,30 @@ const router = createRouter({
     routes,
   });
 
-// router.beforeEach((to, from, next) => {
-//     if (to.name !== 'auth') {
-//         const userInfo = store.getters.getUser;
-//         if (!userInfo.authToken) {
-//             return next({
-//                 replace: true,
-//                 name: 'auth'
-//             })
-//         }
-//     }
+router.beforeEach((to, from, next) => {
+    const whitelist = ['auth', 'register'];
 
-//     next();
-// })
+    const authToken = store.getters.getAuthToken;
+
+    if (whitelist.includes(to.name)) {
+        if (!authToken) {
+            return next();
+        } else {
+            return next({
+                replace: true,
+                name: 'home'
+            })
+        }
+    }
+    
+    if (!authToken) {
+        return next({
+            replace: true,
+            name: 'auth'
+        });
+    }
+    
+    next();
+});
 
 export default router;

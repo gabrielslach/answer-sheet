@@ -18,6 +18,8 @@
 <script>
 import ExcelUploader from './components/ExcelUploader.vue';
 import {useStore} from 'vuex';
+import {useRouter} from 'vue-router';
+import { computed, watch } from 'vue';
 
 export default {
   name: 'LayoutDefault',
@@ -28,8 +30,22 @@ export default {
 
   setup() {
     const store = useStore();
+    const router = useRouter();
 
-    const handleLogout = () => store.dispatch("logout");
+    const authToken = computed(
+      ()=>store.getters.getAuthToken
+      );
+
+    watch(authToken, async ()=>{
+      const routingResp = await router.replace({path: '/'});
+      if (routingResp) {
+        router.replace({path: '/auth'});
+      }
+    });
+
+    const handleLogout = () => {
+      store.dispatch("logout")
+      };
 
     return {
       handleLogout
