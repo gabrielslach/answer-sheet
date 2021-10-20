@@ -10,11 +10,12 @@ const typeDefs = `
     }
 
     type UserInfo {
-        id: String!
+        uid: String!
         name: String!
+        email: String
         userType: String!
-        section: String
-        authToken: String!
+        teacherID: String
+        sectionID: String
     }
 
     ### CARD
@@ -51,7 +52,7 @@ const typeDefs = `
     ##############
 
     type Query {
-        login(name: String): UserInfo!
+        getUser: UserInfo
         getCardDeck(sheetInfo: SheetInfo): [Card]!
         getTeachers: [String]!
         getSections(teacherID: String!): [String]!

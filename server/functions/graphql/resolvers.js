@@ -6,7 +6,7 @@ const addUser = require('./resolvers/addUser.mutation');
 const addSubmission = require('./resolvers/addSubmission.mutation');
 const addSheet = require('./resolvers/addSheet.mutation');
 
-const login = require('./resolvers/login.query');
+const getUser = require('./resolvers/getUser.query');
 const getCardDeck = require('./resolvers/getCardDeck.query');
 const getTeachers = require('./resolvers/getTeachers.query');
 const getSections = require('./resolvers/getSections.query');
@@ -14,7 +14,7 @@ const getActivities = require('./resolvers/getActivities.query');
 const getActivitiesOfTeacher = require('./resolvers/getActivitiesOfTeacher.query');
 
 const Query = {
-    login: login(db),
+    getUser: getUser(db),
     getCardDeck: getCardDeck(db),
     getTeachers: getTeachers(db),
     getSections: getSections(db),
