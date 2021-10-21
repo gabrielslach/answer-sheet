@@ -5,6 +5,8 @@ import getSectionsQuery from "../apollo/queries/getSections";
 import getTeachersQuery from "../apollo/queries/getTeachers";
 import getUserQuery from "../apollo/queries/getUser";
 
+import router from "../router";
+
 const answersModule = {
     state: () => ({
         userInfo:{
@@ -26,6 +28,11 @@ const answersModule = {
                 if (userInfo[key]) {
                     state.userInfo[key] = userInfo[key];
                     }
+            }
+        },
+        clearUserInfo: (state) => {
+            for (let key of Object.keys(state.userInfo)) {
+                state.userInfo[key] = '';
             }
         },
         setAuthToken: (state, authToken) => {
@@ -71,8 +78,8 @@ const answersModule = {
             commit('setLoading', true);
             const auth = getAuth();
             signInWithEmailAndPassword(auth, email, password)
-                .then(() => {
-                    dispatch('fetchUserInfo');
+                .then(userObj => {
+                    dispatch('fetchUserInfo', userObj.user.uid);
                 }).catch( err => {
                     console.log('Auth error', err);
                 }).finally(()=>{
@@ -83,12 +90,19 @@ const answersModule = {
                 
             commit('setUserInfo', userInfo);
         },
-        logout: async () => {
+        logout: async ({commit}) => {
             const auth = getAuth();
             try {
                 await signOut(auth);
+                commit('clearUserInfo');
+
                 localStorage.removeItem('authToken');
                 localStorage.removeItem('userType');
+                
+                router.push({
+                    name:'auth',
+                    replace: true
+                });
             } catch (error) {
                 console.log('Signout error.')
             }
@@ -112,11 +126,22 @@ const answersModule = {
 
             commit("setSections", sections);
         },
-        fetchUserInfo: async ({commit}) => {
-            const { data } = await apolloClient.query(getUserQuery());
+        fetchUserInfo: async ({commit}, userUID) => {
+            const { data } = await apolloClient.query(getUserQuery(userUID));
             const { userInfo } = data;
 
+            const routeNameEnum = {
+                Student: 'studentDashboard',
+                Teacher: 'teacherDashboard'
+            };
+
             localStorage.setItem('userType', userInfo.userType);
+            
+            router.push({
+                name:routeNameEnum[userInfo.userType],
+                replace: true
+            });
+
             commit('setUserInfo', userInfo);
         }
     },

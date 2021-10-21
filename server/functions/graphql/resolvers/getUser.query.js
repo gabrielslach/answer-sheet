@@ -1,10 +1,10 @@
 const {authHandler, authErrorMsg} = require('./authHandler.util');
 
-const getUser = db => async (_,_req, { authorization }) => {
+const getUser = db => async (_,{userUID}, { authorization }) => {
     try {
         const {isAllowed, userInfo} = await authHandler(db, ['Teacher', 'Student'], authorization.split(' ')[1]);
-        console.log(isAllowed, userInfo)
-        if (!isAllowed) {
+        
+        if (!isAllowed || userInfo.uid !== userUID) {
             return null;
         }
 

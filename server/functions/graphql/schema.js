@@ -52,7 +52,7 @@ const typeDefs = `
     ##############
 
     type Query {
-        getUser: UserInfo
+        getUser(userUID: String!): UserInfo
         getCardDeck(sheetInfo: SheetInfo): [Card]!
         getTeachers: [String]!
         getSections(teacherID: String!): [String]!

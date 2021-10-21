@@ -51,11 +51,30 @@ router.beforeEach((to, from, next) => {
     const whitelist = ['auth', 'register'];
 
     const authToken = store.getters.getAuthToken;
+    const {userType} = store.getters.getUser;
 
     if (whitelist.includes(to.name)) {
         if (!authToken) {
             return next();
         } else {
+            return next({
+                replace: true,
+                name: 'home'
+            })
+        }
+    }
+
+    if (to.name === 'teacherDashboard') {
+        if (userType !== 'Teacher') {
+            return next({
+                replace: true,
+                name: 'home'
+            })
+        }
+    }
+
+    if (to.name === 'studentDashboard') {
+        if (userType !== 'Student') {
             return next({
                 replace: true,
                 name: 'home'

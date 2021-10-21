@@ -1,9 +1,9 @@
 import gql from 'graphql-tag';
 
-const getUserQuery = () => {
+const getUserQuery = (userUID) => {
     const query = gql`
-        query {
-            userInfo: getUser {
+        query getUserInfo($userUID: String!) {
+            userInfo: getUser(userUID: $userUID) {
                 uid,
                 name,
                 email,
@@ -11,10 +11,15 @@ const getUserQuery = () => {
                 teacherID,
                 sectionID
                 }
-            }`
+            }`;
+
+    const variables = {
+        userUID
+    }
 
     return {
-        query
+        query,
+        variables
     }
 };
 
