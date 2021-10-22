@@ -4,6 +4,7 @@ import cards from './cards.module';
 import answers from './answers.module';
 import user from './user.module';
 import sheets from './sheets.module';
+import appState from './appState.module';
 
 export default createStore({
     state: () => ({
@@ -13,7 +14,8 @@ export default createStore({
         cards,
         answers,
         user,
-        sheets
+        sheets,
+        appState
     }
 });
 

@@ -19,6 +19,7 @@
         />
     </div>
     <q-btn push color="primary" label="Upload Sheet" size='lg' class='q-mt-md' @click="uploadSheet" />
+    <q-btn push color="primary" label="Submit" size='lg' class='q-mt-md' @click="handleSubmit" />
   </q-page>
 </template>
 
@@ -40,7 +41,7 @@ export default {
     ...mapGetters(['cardDeck'])
   },
   methods: {
-    ...mapActions(['upsertAnswer', 'fetchCards', 'uploadCards']),
+    ...mapActions(['upsertAnswer', 'fetchCards', 'uploadCards', 'submitAnswers']),
     inputCallback (questionID) {
       const that = this;
       return function (answer) {
@@ -50,6 +51,10 @@ export default {
     uploadSheet () {
       const {sectionName, activityName} = this.$route.params;
       this.uploadCards({teacherID: '001', sectionID: sectionName, activityID: activityName})
+    },
+    handleSubmit () {
+      const {sectionName, activityName} = this.$route.params;
+      this.submitAnswers({teacherID: '001', sectionID: sectionName, activityID: activityName});
     }
   },
   mounted() {

@@ -1,3 +1,6 @@
+import { apolloClient } from "../apollo";
+import addSubmissionQuery from "../apollo/mutations/addSubmission";
+
 const answersModule = {
     state: () => ({
         student:{
@@ -27,6 +30,20 @@ const answersModule = {
         upsertAnswer: ({commit}, {questionID, answer}) => {
             console.log('upsertAnswer', {questionID, answer});
             commit('upsertAnswer', {questionID, answer});
+        },
+        submitAnswers: ({state, rootState}, {teacherID, sectionID, activityID}) => {
+            const userID = rootState.user.userInfo.uid;
+            const parsedAnswers = Object.entries(state.answers).map(([questionID, answer]) => ({
+                questionID,
+                answer
+            }));
+            apolloClient.mutate(addSubmissionQuery(
+                userID, 
+                teacherID,
+                sectionID,
+                activityID,
+                parsedAnswers
+                ));
         }
     },
     getters: {

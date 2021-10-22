@@ -24,7 +24,8 @@ const typeDefs = `
         CardType: String!
         Description: String!
         CorrectAnswer: String
-        Choices: [String]
+        Choices: [String],
+        id: Int
     }
 
     input CardInput {

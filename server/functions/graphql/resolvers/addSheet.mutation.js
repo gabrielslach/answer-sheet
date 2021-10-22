@@ -17,8 +17,10 @@ const addSheet = (db) => async (_, {sheetInfo, cards}, {authorization}) => {
             activityID
         } = sheetInfo;
 
+        const cardsWithID = cards.map((card, i) => ({...card, id: i}))
+
         const activityObj = {
-            cards
+            cards: cardsWithID
         };
 
         const teacherRef = db.collection('teachers').doc(teacherID);

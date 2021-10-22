@@ -14,6 +14,7 @@ const getCardDeckQuery = (teacherID, sectionID, activityID) => {
                 Description,
                 CorrectAnswer,
                 Choices,
+                id
             }
         }`
 

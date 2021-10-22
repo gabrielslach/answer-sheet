@@ -2,10 +2,24 @@ import { ApolloClient, ApolloLink, createHttpLink, InMemoryCache, from } from '@
 import { createApolloProvider } from '@vue/apollo-option'
 import store from '../store';
 
+let WEB_SERVER_URL;
+if (
+  window.location.protocol === "https:" //||
+  // window.location.hostname === "bingo.gabrielslach.me"
+) {
+    WEB_SERVER_URL = window.location.origin;
+  }
+else {
+  //WEB_SERVER_URL = "https://us-central1-answersheet-ez.cloudfunctions.net"
+  WEB_SERVER_URL = "http://localhost:5001/answersheet-ez/us-central1"
+  }
+
+const WEB_SERVER_API_URL = WEB_SERVER_URL + "/app";
+
 // HTTP connection to the API
 const httpLink = createHttpLink({
   // You should use an absolute URL here
-  uri: 'http://localhost:5001/answersheet-ez/us-central1/app',
+  uri: WEB_SERVER_API_URL,
 });
 
 // Cache implementation

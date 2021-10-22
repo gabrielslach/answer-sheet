@@ -10,7 +10,7 @@ import router from "../router";
 const answersModule = {
     state: () => ({
         userInfo:{
-            uid: '',
+            uid: localStorage.getItem('uid') || '',
             name: '',
             email: '',
             userType: localStorage.getItem('userType') || '',
@@ -98,6 +98,7 @@ const answersModule = {
 
                 localStorage.removeItem('authToken');
                 localStorage.removeItem('userType');
+                localStorage.removeItem('uid')
                 
                 router.push({
                     name:'auth',
@@ -135,6 +136,7 @@ const answersModule = {
                 Teacher: 'teacherDashboard'
             };
 
+            localStorage.setItem('uid', userUID);
             localStorage.setItem('userType', userInfo.userType);
             
             router.push({

@@ -2,8 +2,7 @@ const firebase = require('firebase-admin');
 
 const authHandler = async (db, authLvls = [], authToken) => {
     try {
-        const decodedToken = await firebase.auth().verifyIdToken(authToken);
-        const { uid, email } = decodedToken;
+        const { uid, email } = await decodeToken(authToken);
         
         const snapshot = await db.collection('users').doc(uid).get();
         
@@ -35,10 +34,22 @@ const authHandler = async (db, authLvls = [], authToken) => {
     
 };
 
-const authErrorMsg = "Oops, you're not allowed to do this :P"
+const authErrorMsg = "Oops, you're not allowed to do this :P";
+
+const decodeToken = async (authToken) => {
+    try {
+        const decodedToken = await firebase.auth().verifyIdToken(authToken);
+        const { uid, email } = decodedToken;
+        
+        return Promise.resolve({ uid, email });
+    } catch (error) {
+        return Promise.reject(error);
+    }
+}
 
 
 module.exports = {
     authHandler,
-    authErrorMsg
+    authErrorMsg,
+    decodeToken
 };
