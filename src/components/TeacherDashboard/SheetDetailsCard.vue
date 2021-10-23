@@ -25,7 +25,7 @@ export default {
     },
     methods: {
         openSheet () {
-            window.open(`/${this.sectionName}/${this.activityName}`)
+            window.open(`/sheet-manager/${this.sectionName}/${this.activityName}/edit`)
         }
     }
 }

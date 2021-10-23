@@ -1,6 +1,7 @@
 import {createRouter, createWebHistory} from 'vue-router';
 
 import CardDeck from '../components/CardDeck';
+import NewCardDeck from '../components/NewCardDeck';
 import Login from '../components/Login';
 import TeacherDashboard from '../components/TeacherDashboard';
 import Register from '../components/Register';
@@ -14,6 +15,11 @@ const routes = [
         path: '/:sectionName/:activityName',
         name: 'deck',
         component: CardDeck
+    },
+    {
+        path: '/sheet-manager/:sectionName/:activityName/:mode',
+        name: 'newDeck',
+        component: NewCardDeck
     },
     {
         path: '/',

@@ -17,6 +17,7 @@ const sheetsModule = {
     actions: {
         fetchSheets: async ({commit}, teacherID) => {
             try {
+                commit('setLoading', true);
                 const sectionsObj = await apolloClient.query(getSectionsQuery(teacherID));
                 sectionsObj.data.sections.forEach(async(sectionID) => {
                     const sheetsObj = await apolloClient.query(getSheetsQuery(teacherID, sectionID));
@@ -25,8 +26,10 @@ const sheetsModule = {
                     
                     commit("addSheets", parsedSheetList);
                 });
+                commit('setLoading', false);
             } catch (error) {
                 console.log(error);
+                commit('setLoading', false);
             }
         }
     },

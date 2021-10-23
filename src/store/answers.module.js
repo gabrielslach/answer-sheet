@@ -31,7 +31,8 @@ const answersModule = {
             console.log('upsertAnswer', {questionID, answer});
             commit('upsertAnswer', {questionID, answer});
         },
-        submitAnswers: ({state, rootState}, {teacherID, sectionID, activityID}) => {
+        submitAnswers: ({state, rootState, commit}, {teacherID, sectionID, activityID}) => {
+            commit('setLoading', true);
             const userID = rootState.user.userInfo.uid;
             const parsedAnswers = Object.entries(state.answers).map(([questionID, answer]) => ({
                 questionID,
@@ -44,6 +45,7 @@ const answersModule = {
                 activityID,
                 parsedAnswers
                 ));
+            commit('setLoading', false);
         }
     },
     getters: {

@@ -18,7 +18,7 @@
         :callback="inputCallback(card.id)"
         />
     </div>
-    <q-btn push color="primary" label="Submit" size='lg' class='q-mt-md' @click="handleSubmit" />
+    <q-btn push color="primary" label="Upload Sheet" size='lg' class='q-mt-md' @click="uploadSheet" />
   </q-page>
 </template>
 
@@ -30,7 +30,7 @@ import SelectCard from './Cards/SelectCard';
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
-  name: 'CardDeck',
+  name: 'NewCardDeck',
   components: {
     TextInputCard,
     TextAreaCard,
@@ -47,13 +47,14 @@ export default {
         that.upsertAnswer({questionID, answer});
       }
     },
-    handleSubmit () {
+    uploadSheet () {
       const {sectionName, activityName} = this.$route.params;
-      this.submitAnswers({teacherID: '001', sectionID: sectionName, activityID: activityName});
+      this.uploadCards({teacherID: '001', sectionID: sectionName, activityID: activityName})
     }
   },
   mounted() {
-    const {sectionName, activityName} = this.$route.params;
+    const {sectionName, activityName, mode} = this.$route.params;
+    if (mode === 'new') return;
     this.fetchCards({teacherID: '001', sectionID: sectionName, activityID: activityName});
   },
 }

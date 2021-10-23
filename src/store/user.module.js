@@ -20,7 +20,6 @@ const answersModule = {
         teachers: [],
         sections: [],
         authToken: localStorage.getItem('authToken') || '',
-        isLoading: false
     }),
     mutations: {
         setUserInfo: (state, userInfo) => {
@@ -43,9 +42,6 @@ const answersModule = {
         },
         setSections: (state, sections) => {
             state.sections = sections;
-        },
-        setLoading: (state, isLoading) => {
-            state.isLoading = isLoading;
         }
     },
     actions: {
@@ -113,12 +109,15 @@ const answersModule = {
             localStorage.setItem('authToken', authToken);
         },
         fetchTeachers: async ({commit}) => {
+            commit('setLoading', true);
             const { data } = await apolloClient.query(getTeachersQuery());
             const { teachers } = data;
 
             commit("setTeachers", teachers);
+            commit('setLoading', false);
         },
         fetchSections: async ({commit}, teacherID) => {
+            commit('setLoading', true);
             if (!teacherID || teacherID.length < 1) {
                 return commit("setSections", []);
             }
@@ -126,8 +125,10 @@ const answersModule = {
             const { sections } = data;
 
             commit("setSections", sections);
+            commit('setLoading', false);
         },
         fetchUserInfo: async ({commit}, userUID) => {
+            commit('setLoading', true);
             const { data } = await apolloClient.query(getUserQuery(userUID));
             const { userInfo } = data;
 
@@ -145,6 +146,7 @@ const answersModule = {
             });
 
             commit('setUserInfo', userInfo);
+            commit('setLoading', false);
         }
     },
     getters: {

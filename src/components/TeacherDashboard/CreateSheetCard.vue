@@ -18,10 +18,11 @@ export default {
 
         const handleCreate = () => {
             router.replace({
-                name: 'deck',
+                name: 'newDeck',
                 params: {
                     sectionName: className.value,
-                    activityName: activityName.value
+                    activityName: activityName.value,
+                    mode: 'new'
                 }
             })
         }

@@ -43,15 +43,19 @@ const cardModule = {
             commit("addCards", sheetData);
         },
         fetchCards: async ({commit}, {teacherID, sectionID, activityID}) => {
+            commit('setLoading', true);
             const { data } = await apolloClient.query(getCardDeckQuery(teacherID, sectionID, activityID));
             const { cardDeck } = data;
 
             commit("loadCards", cardDeck);
+            commit('setLoading', false);
         },
-        uploadCards: async ({state}, {teacherID, sectionID, activityID}) => {
+        uploadCards: async ({state, commit}, {teacherID, sectionID, activityID}) => {
+            commit('setLoading', true);
             const response = await apolloClient.mutate(addSheetQuery(teacherID, sectionID, activityID, state.cards));
 
             console.log('l 54', response)
+            commit('setLoading', false);
         }
     },
     getters: {
