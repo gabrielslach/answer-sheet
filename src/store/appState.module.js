@@ -12,7 +12,7 @@ const appStateModule = {
 
     },
     getters: {
-
+        isLoadingStatus: (state) => state.isLoading
     }
 }
 

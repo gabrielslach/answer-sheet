@@ -7,7 +7,8 @@ if (
   window.location.protocol === "https:" //||
   // window.location.hostname === "bingo.gabrielslach.me"
 ) {
-    WEB_SERVER_URL = window.location.origin;
+  WEB_SERVER_URL = "https://us-central1-answersheet-ez.cloudfunctions.net"
+    //WEB_SERVER_URL = window.location.origin;
   }
 else {
   WEB_SERVER_URL = "https://us-central1-answersheet-ez.cloudfunctions.net"

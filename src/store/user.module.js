@@ -78,13 +78,8 @@ const answersModule = {
                     dispatch('fetchUserInfo', userObj.user.uid);
                 }).catch( err => {
                     console.log('Auth error', err);
-                }).finally(()=>{
                     commit('setLoading', false);
                 })
-
-            const userInfo = {};
-                
-            commit('setUserInfo', userInfo);
         },
         logout: async ({commit}) => {
             const auth = getAuth();

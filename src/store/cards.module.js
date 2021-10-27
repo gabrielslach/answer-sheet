@@ -9,7 +9,6 @@ const cardModule = {
     mutations: {
         addCards: (state, newCards) => {
             state.cards = [
-                ...state.cards,
                 ...newCards
             ];
         },

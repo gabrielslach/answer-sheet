@@ -10,6 +10,11 @@
         </q-toolbar>
       </q-header>
     <q-page-container>
+      <q-dialog v-model="isLoading" full-height full-width>
+        <q-inner-loading :showing="true">
+          <q-spinner-gears size="100px" color="primary" />
+        </q-inner-loading>
+      </q-dialog>
       <router-view></router-view>
     </q-page-container>
   </q-layout>
@@ -31,6 +36,7 @@ export default {
     const store = useStore();
 
     const authToken = computed(()=> store.getters.getAuthToken);
+    const isLoading = computed(()=> store.getters.isLoadingStatus);
 
     const handleLogout = () => {
       store.dispatch("logout")
@@ -38,7 +44,8 @@ export default {
 
     return {
       handleLogout,
-      authToken
+      authToken,
+      isLoading
     }
   }
 }

@@ -6,10 +6,13 @@ const server = new GraphQLServer({
     typeDefs,
     resolvers,
     introspection: true,
-    playgroud: true,
     context: (context) => (context.request.headers)
 });
 
 server.createHttpServer({ cors: true });
+server.express.use((req,res, next)=> {
+    console.log(req.headers)
+    next();
+})
 
 module.exports = server.express;
