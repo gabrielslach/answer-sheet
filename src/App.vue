@@ -5,14 +5,16 @@
           <q-btn flat round dense icon="menu" class="q-mr-sm" />
           <q-toolbar-title>{{ this.$store.state.appTitle }}</q-toolbar-title>
 
-          <ExcelUploader/>
+          <div v-if="userType === 'Teacher'">
+          <ExcelUploader />
+          </div>
           <q-btn v-if="authToken" outline flat stack style="color: white;" icon="logout" label='Logout' class="q-ml-lg" @click="handleLogout" />
         </q-toolbar>
       </q-header>
     <q-page-container>
       <q-dialog v-model="isLoading" full-height full-width>
         <q-inner-loading :showing="true">
-          <q-spinner-gears size="100px" color="primary" />
+          <q-spinner-pie size="100px" color="primary" />
         </q-inner-loading>
       </q-dialog>
       <router-view></router-view>
@@ -37,6 +39,9 @@ export default {
 
     const authToken = computed(()=> store.getters.getAuthToken);
     const isLoading = computed(()=> store.getters.isLoadingStatus);
+    const userInfo = computed(()=> store.getters.getUser);
+
+    const {userType} = userInfo;
 
     const handleLogout = () => {
       store.dispatch("logout")
@@ -45,7 +50,8 @@ export default {
     return {
       handleLogout,
       authToken,
-      isLoading
+      isLoading,
+      userType
     }
   }
 }

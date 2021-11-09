@@ -51,7 +51,7 @@ const answersModule = {
                 const auth = getAuth();
                 const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
 
-                commit('setUserInfo', {uid: userCredentials.user.uid});
+                //commit('setUserInfo', {uid: userCredentials.user.uid});
                 commit('setLoading', false);
                 dispatch('addUserToDB', {uid: userCredentials.user.uid, name, teacher, section});
             } catch (error) {
@@ -59,12 +59,13 @@ const answersModule = {
                 commit('setLoading', false);
             }
         },
-        addUserToDB: async ({commit}, {uid, name, teacher, section}) => {
+        addUserToDB: async ({commit, dispatch}, {uid, name, teacher, section}) => {
             try {
                 commit('setLoading', true);
-                const dbResp = await apolloClient.mutate(addUserQuery(name, uid, teacher, section));
-                alert(JSON.stringify(dbResp));
+                await apolloClient.mutate(addUserQuery(name, uid, teacher, section));
+                
                 commit('setLoading', false);
+                dispatch('fetchUserInfo', uid);
             } catch (error) {
                 alert(JSON.stringify(error));
                 commit('setLoading', false);
@@ -101,7 +102,12 @@ const answersModule = {
         },
         setAuthToken: async ({commit}, authToken) => {
             commit('setAuthToken', authToken);
-            localStorage.setItem('authToken', authToken);
+            if (authToken) {
+                localStorage.setItem('authToken', authToken);
+            } else {
+                localStorage.removeItem('authToken');
+            }
+            
         },
         fetchTeachers: async ({commit}) => {
             commit('setLoading', true);

@@ -1,8 +1,8 @@
 <template>
+<div class='root'>
   <q-form
         @submit="onSubmit"
         @reset="onReset"
-        class="q-gutter-md"
       >
     <q-card flat bordered class="q-ma-lg">
       <q-card-section>
@@ -25,12 +25,16 @@
           ]"
         />
       </q-card-section>
-        <q-card-actions>
-          <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
-          <q-btn label="Submit" type="submit" color="primary"/>
+        <q-card-actions class="q-pb-md q-px-md">
+          <q-btn label="Submit" class="full-width" type="submit" color="primary"/>
         </q-card-actions>
       </q-card>
     </q-form>
+
+    <div class="q-px-lg">
+      <q-btn label="Register" color="primary" class="full-width" outline/>
+    </div>
+</div>
 </template>
 
 <script>
@@ -63,4 +67,7 @@ export default {
 
 <style>
 
+.root {
+  max-width: 500px;
+}
 </style>
