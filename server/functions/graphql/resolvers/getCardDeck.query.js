@@ -16,7 +16,7 @@ const getCardDeck = db => async (_, {sheetInfo}) => {
             
         if (snapshot.empty) {
             return 'No Data'
-        };
+        }
 
         const activityObj = snapshot.data();
         const cards = activityObj.cards;
