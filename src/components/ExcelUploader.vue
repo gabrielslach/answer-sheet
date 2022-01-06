@@ -1,6 +1,6 @@
 <template>
   <input id="fileUpload" type="file" @change="readFile" hidden>
-  <q-btn round flat style="color: white;" icon="cloud_upload" @click="triggerFileUpload()" />
+  <q-btn push color="primary" label="Upload Sheet" size='lg' class='q-my-md' icon="cloud_upload" @click="triggerFileUpload()" />
 </template>
 
 <script>

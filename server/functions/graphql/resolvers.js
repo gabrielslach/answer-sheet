@@ -12,6 +12,7 @@ const getTeachers = require('./resolvers/getTeachers.query');
 const getSections = require('./resolvers/getSections.query');
 const getActivities = require('./resolvers/getActivities.query');
 const getActivitiesOfTeacher = require('./resolvers/getActivitiesOfTeacher.query');
+const getSubmissions = require('./resolvers/getSubmissions.query');
 
 const Query = {
     getUser: getUser(db),
@@ -19,7 +20,8 @@ const Query = {
     getTeachers: getTeachers(db),
     getSections: getSections(db),
     getActivities: getActivities(db),
-    getActivitiesOfTeacher: getActivitiesOfTeacher(db)
+    getActivitiesOfTeacher: getActivitiesOfTeacher(db),
+    getSubmissions: getSubmissions(db)
 };
 
 const Mutation = {
@@ -30,7 +32,7 @@ const Mutation = {
 
 const miscResolvers = {
     Card: {
-        CorrectAnswer: (cardObj,_,context,info) => {
+        CorrectAnswer: (cardObj,_,context) => {
             const { CorrectAnswer } = cardObj;
             const { auth } = context;
 

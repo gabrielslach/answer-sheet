@@ -1,12 +1,7 @@
 const {decodeToken, authErrorMsg} = require('./authHandler.util');
+
 const addSubmission = db => async (_, {userID, sheetInfo, answers}, { authorization }) => {
     try {
-        const {
-            teacherID,
-            sectionID,
-            activityID
-        } = sheetInfo;
-
         const { uid } = await decodeToken(authorization.split(' ')[1]);
         
         if (uid !== userID) {
@@ -17,16 +12,11 @@ const addSubmission = db => async (_, {userID, sheetInfo, answers}, { authorizat
         
         const submissionObj = {
             answers: checkedAnswers,
-            userID
+            userID,
+            sheetInfo
         };
 
-        const addSubmissionResp = await db.collection('teachers')
-            .doc(teacherID)
-            .collection('sections')
-            .doc(sectionID)
-            .collection('activities')
-            .doc(activityID)
-            .collection('submissions')
+        const addSubmissionResp = await db.collection('submissions')
             .add(submissionObj)
 
         return JSON.stringify(addSubmissionResp);
@@ -53,7 +43,7 @@ const checkAnswers = async (db, sheetInfo, answers) => {
         
     if (snapshot.empty) {
         return 'No Data'
-    };
+    }
 
     const activityObj = snapshot.data();
     const cards = activityObj.cards;

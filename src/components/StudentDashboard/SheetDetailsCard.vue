@@ -11,6 +11,10 @@
 <script>
 export default {
     props: {
+        teacherName: {
+            type: String,
+            default: 'Teacher Name'
+        },
         sectionName: {
             type: String,
             default: 'Class Name'
@@ -22,7 +26,7 @@ export default {
     },
     methods: {
         openSheet () {
-            window.open(`/${this.sectionName}/${this.activityName}`)
+            window.open(`/${this.teacherName}/${this.sectionName}/${this.activityName}`)
         }
     }
 }

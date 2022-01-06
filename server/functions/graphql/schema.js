@@ -59,6 +59,7 @@ const typeDefs = `
         getSections(teacherID: String!): [String]!
         getActivities(teacherID: String!, sectionID: String!): [String]!
         getActivitiesOfTeacher(teacherID: String!): [String]!
+        getSubmissions(userType:String!, ID: String!): [String]!
     }
 
     type Mutation {

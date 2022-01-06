@@ -21,9 +21,11 @@ export default {
   components: { CreateSheetCard, SheetDetailsCard },
   setup() {
     const store = useStore();
+    
+    const userInfo = computed(()=>store.getters.getUser);
 
-    store.dispatch('fetchSheets', '001');
-
+    store.dispatch('fetchSheets', userInfo.value.teacherID);
+    
     const sheets = computed(
       ()=>store.getters.getSheets
       );

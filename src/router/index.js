@@ -12,12 +12,12 @@ import store from '../store';
 
 const routes = [
     {
-        path: '/:sectionName/:activityName',
+        path: '/:teacherName/:sectionName/:activityName',
         name: 'deck',
         component: CardDeck
     },
     {
-        path: '/sheet-manager/:sectionName/:activityName/:mode',
+        path: '/sheet-manager/:teacherName/:sectionName/:activityName/:mode',
         name: 'newDeck',
         component: NewCardDeck
     },

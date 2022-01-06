@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex';
 export default {
     props: {
         sectionName: {
@@ -23,9 +24,12 @@ export default {
             default: 'Activity Name'
         }
     },
+    computed: {
+        ...mapGetters(['getUser'])
+    },
     methods: {
         openSheet () {
-            window.open(`/sheet-manager/${this.sectionName}/${this.activityName}/edit`)
+            window.open(`/sheet-manager/${this.getUser.teacherID}/${this.sectionName}/${this.activityName}/edit`)
         }
     }
 }

@@ -65,18 +65,25 @@
         </q-step>
       </q-stepper>
   </q-form>
+
+  <div class="to-login-foot q-pt-md q-mx-auto">
+    <div class='text-subtitle-1'>
+      Already have an account?
+    </div>
+    <q-btn label="Go to Login" color="primary" class="full-width" flat @click="login()" />
+  </div>
 </template>
 
 <script>
 import { ref, watch, computed } from 'vue';
-//import {useRouter} from 'vue-router';
+import {useRouter} from 'vue-router';
 import {useStore} from 'vuex';
 
 export default {
   setup () {
     const store = useStore();
     
-    //const router = useRouter();
+    const router = useRouter();
     
     const email = ref(null);
     const password = ref(null);
@@ -94,7 +101,7 @@ export default {
 
     const sections = computed(
       ()=>store.getters.getSections
-    )
+    );
 
     watch(teacher, (val) => {
       store.dispatch('fetchSections', val);
@@ -127,6 +134,12 @@ export default {
         name.value = null
         teacher.value = null
         section.value = null
+      },
+
+      login () {
+        router.replace({
+          name:'auth'
+        })
       }
     }
   }
@@ -138,5 +151,8 @@ export default {
     max-width: 500px;
     margin-left: auto;
     margin-right: auto;
+  }
+  .to-login-foot {
+    width: fit-content;
   }
 </style>

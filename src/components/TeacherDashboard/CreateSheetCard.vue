@@ -7,8 +7,9 @@
 </template>
 
 <script>
-import {ref} from 'vue';
+import {ref, computed} from 'vue';
 import {useRouter} from 'vue-router';
+import {useStore} from 'vuex';
 
 export default {
     setup() {
@@ -16,10 +17,15 @@ export default {
         const activityName = ref(null);
         const router = useRouter();
 
+        const store = useStore();
+
+        const userInfo = computed(()=>store.getters.getUser);
+
         const handleCreate = () => {
             router.replace({
                 name: 'newDeck',
                 params: {
+                    teacherName: userInfo.value.teacherID,
                     sectionName: className.value,
                     activityName: activityName.value,
                     mode: 'new'

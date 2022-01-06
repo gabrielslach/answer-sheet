@@ -32,7 +32,7 @@
     </q-form>
 
     <div class="q-px-lg">
-      <q-btn label="Register" color="primary" class="full-width" outline/>
+      <q-btn label="Register" color="primary" class="full-width" outline @click="register()" />
     </div>
 </div>
 </template>
@@ -40,10 +40,12 @@
 <script>
 import { ref } from 'vue';
 import {useStore} from 'vuex';
+import {useRouter} from 'vue-router';
 
 export default {
   setup () {
     const store = useStore();
+    const router = useRouter();
     
     const email = ref(null);
     const password = ref(null);
@@ -56,9 +58,10 @@ export default {
         store.dispatch('login',{email: email.value, password: password.value})
       },
 
-      onReset () {
-        email.value = null
-        password.value = null
+      register () {
+        router.replace({
+          name:'register'
+        })
       }
     }
   }

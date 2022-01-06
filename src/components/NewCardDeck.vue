@@ -1,5 +1,6 @@
 <template>
   <q-page class="column items-stretch" padding>
+    <excel-uploader />
     <div v-for="card in cardDeck" :key="card">
       <TextInputCard 
         v-if="card.CardType === 'text-input'"
@@ -18,7 +19,7 @@
         :callback="inputCallback(card.id)"
         />
     </div>
-    <q-btn push color="primary" label="Upload Sheet" size='lg' class='q-mt-md' @click="uploadSheet" />
+    <q-btn v-if="cardDeck.length > 0" push color="primary" label="Save" icon="save" size='lg' class='q-mt-md' @click="uploadSheet" />
   </q-page>
 </template>
 
@@ -26,6 +27,7 @@
 import TextInputCard from './Cards/TextInputCard';
 import TextAreaCard from './Cards/TextAreaCard';
 import SelectCard from './Cards/SelectCard';
+import ExcelUploader from './ExcelUploader.vue';
 
 import { mapGetters, mapActions } from 'vuex';
 
@@ -34,7 +36,8 @@ export default {
   components: {
     TextInputCard,
     TextAreaCard,
-    SelectCard
+    SelectCard,
+    ExcelUploader
   },
   computed: {
     ...mapGetters(['cardDeck'])
@@ -48,14 +51,15 @@ export default {
       }
     },
     uploadSheet () {
-      const {sectionName, activityName} = this.$route.params;
-      this.uploadCards({teacherID: '001', sectionID: sectionName, activityID: activityName})
+      const {teacherName, sectionName, activityName} = this.$route.params;
+      this.uploadCards({teacherID: teacherName, sectionID: sectionName, activityID: activityName})
     }
   },
   mounted() {
-    const {sectionName, activityName, mode} = this.$route.params;
+    const {teacherName, sectionName, activityName, mode} = this.$route.params;
     if (mode === 'new') return;
-    this.fetchCards({teacherID: '001', sectionID: sectionName, activityID: activityName});
+
+    this.fetchCards({teacherID: teacherName, sectionID: sectionName, activityID: activityName});
   },
 }
 </script>

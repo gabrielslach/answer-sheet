@@ -48,13 +48,13 @@ export default {
       }
     },
     handleSubmit () {
-      const {sectionName, activityName} = this.$route.params;
-      this.submitAnswers({teacherID: '001', sectionID: sectionName, activityID: activityName});
+      const {teacherName, sectionName, activityName} = this.$route.params;
+      this.submitAnswers({teacherID: teacherName, sectionID: sectionName, activityID: activityName});
     }
   },
   mounted() {
-    const {sectionName, activityName} = this.$route.params;
-    this.fetchCards({teacherID: '001', sectionID: sectionName, activityID: activityName});
+      const {teacherName, sectionName, activityName} = this.$route.params;
+    this.fetchCards({teacherID: teacherName, sectionID: sectionName, activityID: activityName});
   },
 }
 </script>

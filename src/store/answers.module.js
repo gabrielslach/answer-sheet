@@ -31,20 +31,28 @@ const answersModule = {
             console.log('upsertAnswer', {questionID, answer});
             commit('upsertAnswer', {questionID, answer});
         },
-        submitAnswers: ({state, rootState, commit}, {teacherID, sectionID, activityID}) => {
+        submitAnswers: async ({state, rootState, commit}, {teacherID, sectionID, activityID}) => {
             commit('setLoading', true);
-            const userID = rootState.user.userInfo.uid;
-            const parsedAnswers = Object.entries(state.answers).map(([questionID, answer]) => ({
-                questionID,
-                answer
-            }));
-            apolloClient.mutate(addSubmissionQuery(
-                userID, 
-                teacherID,
-                sectionID,
-                activityID,
-                parsedAnswers
-                ));
+
+            try {
+                const userID = rootState.user.userInfo.uid;
+                const parsedAnswers = Object.entries(state.answers).map(([questionID, answer]) => ({
+                    questionID,
+                    answer
+                }));
+                await apolloClient.mutate(addSubmissionQuery(
+                    userID, 
+                    teacherID,
+                    sectionID,
+                    activityID,
+                    parsedAnswers
+                    ));
+                alert('Your answers are submitted successfully.')
+                window.close();
+            } catch (error) {
+                alert('Submission failed, please try again later.')
+            }
+            
             commit('setLoading', false);
         }
     },

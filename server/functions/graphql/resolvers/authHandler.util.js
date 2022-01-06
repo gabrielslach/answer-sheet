@@ -12,17 +12,17 @@ const authHandler = async (db, authLvls = [], authToken) => {
         
         if (!userInfo) {
             return {isAllowed, userInfo: {}}
-        };
+        }
 
         const { userType } = userInfo;
 
-        for (i in authLvls) {
+        for (let i in authLvls) {
             console.log(authLvls[i], '=', userType)
             if (authLvls[i] === userType) {
                 isAllowed = true;
                 break;
             }
-        };
+        }
 
         userInfo.email = email;
 
@@ -43,6 +43,7 @@ const decodeToken = async (authToken) => {
         
         return Promise.resolve({ uid, email });
     } catch (error) {
+        console.log('auth error', error)
         return Promise.reject(error);
     }
 }

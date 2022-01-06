@@ -7,15 +7,17 @@ import getUserQuery from "../apollo/queries/getUser";
 
 import router from "../router";
 
+const _userInfo = JSON.parse(localStorage.getItem('userInfo')) || {};
+
 const answersModule = {
     state: () => ({
         userInfo:{
-            uid: localStorage.getItem('uid') || '',
-            name: '',
-            email: '',
-            userType: localStorage.getItem('userType') || '',
-            teacherID: '',
-            sectionID: ''
+            uid: _userInfo.uid || '',
+            name: _userInfo.name || '',
+            email: _userInfo.email || '',
+            userType: _userInfo.userType || '',
+            teacherID: _userInfo.teacherID || '',
+            sectionID: _userInfo.sectionID || ''
         },
         teachers: [],
         sections: [],
@@ -48,28 +50,40 @@ const answersModule = {
         addUserToAuth: async ({commit, dispatch}, {email, password, name, teacher, section}) => {
             try {
                 commit('setLoading', true);
+
+                const _uid = localStorage.getItem('uid');
+                if (_uid && _uid.length > 0) {
+                    dispatch('addUserToDB', {uid:_uid, name, teacher, section});
+                }
+
                 const auth = getAuth();
                 const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
 
-                //commit('setUserInfo', {uid: userCredentials.user.uid});
-                commit('setLoading', false);
+                localStorage.setItem('uid', userCredentials.user.uid)
+            
                 dispatch('addUserToDB', {uid: userCredentials.user.uid, name, teacher, section});
             } catch (error) {
-                alert(JSON.stringify(error));
-                commit('setLoading', false);
+                if (error.name === 'FirebaseError' && error.customData._tokenResponse.error.message === 'EMAIL_EXISTS') {
+                    alert('Creating user failed: this email has an existing account. Login with this email.');
+                } else {
+                    alert('Creating user failed: Network error. Please try again.');
+                }
             }
+
+            commit('setLoading', false);
         },
         addUserToDB: async ({commit, dispatch}, {uid, name, teacher, section}) => {
             try {
                 commit('setLoading', true);
                 await apolloClient.mutate(addUserQuery(name, uid, teacher, section));
-                
-                commit('setLoading', false);
                 dispatch('fetchUserInfo', uid);
+
+                localStorage.removeItem('uid');
             } catch (error) {
-                alert(JSON.stringify(error));
-                commit('setLoading', false);
+                alert('Saving user record failed, please dont close the window and try again.');
             }
+
+            commit('setLoading', false);
         },
         login: async ({commit, dispatch}, {email, password}) => {
             commit('setLoading', true);
@@ -89,8 +103,7 @@ const answersModule = {
                 commit('clearUserInfo');
 
                 localStorage.removeItem('authToken');
-                localStorage.removeItem('userType');
-                localStorage.removeItem('uid')
+                localStorage.removeItem('userInfo');
                 
                 router.push({
                     name:'auth',
@@ -138,8 +151,7 @@ const answersModule = {
                 Teacher: 'teacherDashboard'
             };
 
-            localStorage.setItem('uid', userUID);
-            localStorage.setItem('userType', userInfo.userType);
+            localStorage.setItem('userInfo', JSON.stringify(userInfo));
             
             router.push({
                 name:routeNameEnum[userInfo.userType],
