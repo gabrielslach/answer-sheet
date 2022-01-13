@@ -1,51 +1,41 @@
-const queryConstructor = (queryRef) => (key, val) => {
-    const fields = {
-        userID: 'userID',
-        teacherID: 'sheetInfo.teacherID',
-        sectionID: 'sheetInfo.sectionID',
-        activityID: 'sheetInfo.activityID'
-    }
-
-    return queryRef.where(fields[key], '==', val);
-}
-
-const fetchSubmissions = db => (parameters) => {
-    let queryRef = db.collection('submissions')
-    
-    Object.entries(parameters).forEach(([key, val]) => {
-        queryRef = queryConstructor(queryRef)(key, val)
-    })
-
-    return queryRef.get();
-}
-
-const getActivities = db => async (_,{teacherID, sectionID, userID}) => {
-    try {        
-        const activitiesSnap = await db.collection('teachers')
-            .doc(teacherID)
-            .collection('sections')
-            .doc(sectionID)
-            .collection('activities')
+const getActivities = db => async (_, {sectionID}) => {
+    try {
+        const activityInfo = {
+            activityID: '',
+            activityName: '',
+            sectionID: '',
+            sectionName: '',
+            teacherID: '',
+            teacherName: '',
+            submissions: [],
+            deadlineDate: ''
+        };
+        
+        const activitySnap = await db.collection('activities')
+            .where('sectionID', '==', sectionID)
             .get();
-            
-        if (activitiesSnap.empty) {
-            return 'No Data'
-        }
 
+        if (activitySnap.empty) {
+            return [];
+        }
+        
         const activities = [];
 
-        activitiesSnap.forEach(async (doc) => {            
-            const submissionsSnap = await fetchSubmissions(db)({teacherID, sectionID, activityID: doc.id, userID});
-
-            activities.push(JSON.stringify({
-                activityID: doc.id,
-                noSubmissions: submissionsSnap.size
-            }));
-        });
+        activitySnap.forEach(doc => {
+            const docData = doc.data();
+            const actInfo = {...activityInfo};
+            Object.keys(actInfo).forEach(key => {
+                actInfo[key] = docData[key] || null;
+            })
+            actInfo.activityID = doc.id;
+            actInfo.deadlineDate = String(actInfo.deadlineDate.toMillis());
+            
+            activities.push(actInfo);
+        })
 
         return activities;
     } catch(err) {
-        return 'No Data Found';
+        console.log('getActivitiesErr', err)
     }
 };
 

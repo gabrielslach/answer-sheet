@@ -37,7 +37,7 @@ const typeDefs = `
 
     ### ANSWER
 
-    input Answer {
+    input AnswerInput {
         questionID: String
         answer: String
     }
@@ -50,6 +50,36 @@ const typeDefs = `
         activityID: String
     }
 
+    ### ACTIVITIES
+
+    type Submission {
+        submissionID: String
+        userID: String
+        userName: String
+        answers: [Answer]
+    }
+
+    type Answer {
+        questionID: String
+        answer: String
+    }
+
+    type ActivityInfo {
+        activityID: String
+        activityName: String
+        sectionID: String
+        sectionName: String
+        teacherID: String
+        teacherName: String
+        submissions: [Submission]
+        deadlineDate: String
+    }
+
+    type Activity {
+        cardDeck: [Card]!
+        submissions: [Submission]
+    }
+
     ##############
 
     type Query {
@@ -57,14 +87,15 @@ const typeDefs = `
         getCardDeck(sheetInfo: SheetInfo): [Card]!
         getTeachers: [String]!
         getSections(teacherID: String!): [String]!
-        getActivities(teacherID: String!, sectionID: String!): [String]!
         getActivitiesOfTeacher(teacherID: String!): [String]!
         getSubmissions(userType:String!, ID: String!): [String]!
+        getActivities(sectionID: String!): [ActivityInfo]!
+        getActivity(activityID: String!): Activity
     }
 
     type Mutation {
         addSheet(sheetInfo: SheetInfo, cards: [CardInput]): String!
-        addSubmission(userID: String, sheetInfo: SheetInfo, answers: [Answer]): String!
+        addSubmission(userID: String, sheetInfo: SheetInfo, answers: [AnswerInput]): String!
         addUser(userInfo: UserInput): String!
     }
 `;

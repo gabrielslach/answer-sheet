@@ -14,6 +14,11 @@ const getActivities = require('./resolvers/getActivities.query');
 const getActivitiesOfTeacher = require('./resolvers/getActivitiesOfTeacher.query');
 const getSubmissions = require('./resolvers/getSubmissions.query');
 
+const submissions = require('./resolvers/submissions.query')(db);
+const sectionName = require('./resolvers/sectionName.query')(db);
+const teacherName = require('./resolvers/teacherName.query')(db);
+const userName = require('./resolvers/userName.query')(db);
+
 const Query = {
     getUser: getUser(db),
     getCardDeck: getCardDeck(db),
@@ -38,6 +43,14 @@ const miscResolvers = {
 
             return auth === 'teacher'? CorrectAnswer : null;
         }
+    },
+    ActivityInfo: {
+        submissions,
+        sectionName,
+        teacherName,
+    },
+    Submission: {
+        userName
     }
 }
 
