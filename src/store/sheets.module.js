@@ -1,6 +1,5 @@
 import { apolloClient } from "../apollo";
-import getSectionsQuery from "../apollo/queries/getSections";
-import getSheetsQuery from "../apollo/queries/getSheets";
+import {getActivitiesBySectionQuery, getActivitiesByTeacherQuery} from "../apollo/queries/getActivities";
 
 const sheetsModule = {
     state: () => ({
@@ -15,17 +14,27 @@ const sheetsModule = {
         },
     },
     actions: {
-        fetchSheets: async ({commit}, teacherID) => {
+        fetchActivitiesBySection: async ({commit}, sectionID) => {
             try {
                 commit('setLoading', true);
-                const sectionsObj = await apolloClient.query(getSectionsQuery(teacherID));
-                sectionsObj.data.sections.forEach(async(sectionID) => {
-                    const sheetsObj = await apolloClient.query(getSheetsQuery(teacherID, sectionID));
-                    const { sheets } = sheetsObj.data;
-                    const parsedSheetList = sheets.map( sheetID => ({sectionID, sheetID}))
-                    
-                    commit("addSheets", parsedSheetList);
-                });
+                const sheetsObj = await apolloClient.query(getActivitiesBySectionQuery(sectionID));
+                const { activities } = sheetsObj.data;
+
+                commit("addSheets", activities);
+                commit('setLoading', false);
+            } catch (error) {
+                console.log(error);
+                commit('setLoading', false);
+            }
+        },
+        
+        fetchActivitiesByTeacher: async ({commit}, teacherID) => {
+            try {
+                commit('setLoading', true);
+                const sheetsObj = await apolloClient.query(getActivitiesByTeacherQuery(teacherID));
+                const { activities } = sheetsObj.data;
+
+                commit("addSheets", activities);
                 commit('setLoading', false);
             } catch (error) {
                 console.log(error);

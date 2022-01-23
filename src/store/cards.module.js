@@ -41,9 +41,10 @@ const cardModule = {
 
             commit("addCards", sheetData);
         },
-        fetchCards: async ({commit}, {teacherID, sectionID, activityID}) => {
+        fetchCards: async ({commit}, activityID) => {
+            debugger; // eslint-disable-line no-debugger
             commit('setLoading', true);
-            const { data } = await apolloClient.query(getCardDeckQuery(teacherID, sectionID, activityID));
+            const { data } = await apolloClient.query(getCardDeckQuery(activityID));
             const { cardDeck } = data;
 
             commit("loadCards", cardDeck);

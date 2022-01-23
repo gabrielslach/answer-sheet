@@ -3,7 +3,10 @@ import gql from 'graphql-tag';
 const getTeachersQuery = () => {
     const query = gql`
         query {
-            teachers:getTeachers
+            teachers:getTeachers{
+                teacherID,
+                teacherName
+            }
             }`
 
     return {

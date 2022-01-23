@@ -62,10 +62,15 @@ const answersModule = {
                 localStorage.setItem('uid', userCredentials.user.uid)
             
                 dispatch('addUserToDB', {uid: userCredentials.user.uid, name, teacher, section});
-            } catch (error) {
-                if (error.name === 'FirebaseError' && error.customData._tokenResponse.error.message === 'EMAIL_EXISTS') {
+            } catch (e) {
+                const error = new Object(e);
+                debugger; // eslint-disable-line no-debugger
+                if (error.code === 400) {
                     alert('Creating user failed: this email has an existing account. Login with this email.');
-                } else {
+                } else if (error.code === 'auth/weak-password') {
+                    alert('Password is weak. It should have atleast 6 characters.')
+                }
+                 else {
                     alert('Creating user failed: Network error. Please try again.');
                 }
             }
@@ -127,7 +132,7 @@ const answersModule = {
             const { data } = await apolloClient.query(getTeachersQuery());
             const { teachers } = data;
 
-            commit("setTeachers", teachers);
+            commit("setTeachers", teachers.map(o => ({label: o.teacherName, value: o.teacherID})));
             commit('setLoading', false);
         },
         fetchSections: async ({commit}, teacherID) => {
@@ -138,7 +143,7 @@ const answersModule = {
             const { data } = await apolloClient.query(getSectionsQuery(teacherID));
             const { sections } = data;
 
-            commit("setSections", sections);
+            commit("setSections", sections.map(o => ({label: o.sectionName, value: o.sectionID})));
             commit('setLoading', false);
         },
         fetchUserInfo: async ({commit}, userUID) => {

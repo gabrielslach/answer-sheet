@@ -1,11 +1,13 @@
 <template>
   <q-page class="column items-stretch" padding>
       <create-sheet-card/>
-      <sheet-details-card 
-        v-for="sheet in sheets" 
-        :key="sheet.sheetID" 
-        :sectionName="sheet.sectionID" 
-        :activityName="sheet.sheetID" 
+      <sheet-details-card
+        v-for="a in activities" 
+        :key="a.activityID"
+        :teacherName="a.teacherName"
+        :sectionName="a.sectionName" 
+        :activityName="a.activityName"
+        :noOfSubmission="a.submissions.length"
         />
   </q-page>
 </template>
@@ -24,14 +26,14 @@ export default {
     
     const userInfo = computed(()=>store.getters.getUser);
 
-    store.dispatch('fetchSheets', userInfo.value.teacherID);
+    store.dispatch('fetchActivitiesByTeacher', userInfo.value.teacherID);
     
-    const sheets = computed(
+    const activities = computed(
       ()=>store.getters.getSheets
       );
 
     return {
-      sheets
+      activities
     }
   }
 

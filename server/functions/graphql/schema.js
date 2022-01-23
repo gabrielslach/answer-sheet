@@ -80,16 +80,27 @@ const typeDefs = `
         submissions: [Submission]
     }
 
+    type Teacher {
+        teacherID: String
+        teacherName: String
+    }
+
+    type Section {
+        sectionID: String
+        sectionName: String
+    }
+
     ##############
 
     type Query {
         getUser(userUID: String!): UserInfo
-        getCardDeck(sheetInfo: SheetInfo): [Card]!
-        getTeachers: [String]!
-        getSections(teacherID: String!): [String]!
+        getCardDeck(activityID: String!): [Card]!
+        getTeachers: [Teacher]!
+        getSections(teacherID: String!): [Section]!
         getActivitiesOfTeacher(teacherID: String!): [String]!
         getSubmissions(userType:String!, ID: String!): [String]!
-        getActivities(sectionID: String!): [ActivityInfo]!
+        getActivitiesBySectionID(sectionID: String!): [ActivityInfo]!
+        getActivitiesByTeacherID(teacherID: String!): [ActivityInfo]!
         getActivity(activityID: String!): Activity
     }
 

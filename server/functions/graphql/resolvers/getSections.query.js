@@ -1,19 +1,23 @@
 const getSections = db => async (_,{teacherID}) => {
     try {
         
-        const snapshot = await db.collection('teachers')
-            .doc(teacherID)
-            .collection('sections')
+        const snapshot = await db.collection('sections')
+            .where('teacherID', '==', teacherID)
             .get();
             
         if (snapshot.empty) {
             return 'No Data'
-        };
-
+        }
+        
         const sections = [];
 
         snapshot.forEach(doc => {
-            sections.push(doc.id);
+            const data = doc.data();
+
+            sections.push({
+                sectionName: data.sectionName, 
+                sectionID: doc.id
+            });
         });
 
         return sections;

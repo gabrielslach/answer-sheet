@@ -53,8 +53,8 @@ export default {
     }
   },
   mounted() {
-      const {teacherName, sectionName, activityName} = this.$route.params;
-    this.fetchCards({teacherID: teacherName, sectionID: sectionName, activityID: activityName});
+      const {activityName} = this.$route.params;
+    this.fetchCards(activityName);
   },
 }
 </script>

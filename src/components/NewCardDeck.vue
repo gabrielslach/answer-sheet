@@ -56,10 +56,10 @@ export default {
     }
   },
   mounted() {
-    const {teacherName, sectionName, activityName, mode} = this.$route.params;
+    const {activityName, mode} = this.$route.params;
     if (mode === 'new') return;
 
-    this.fetchCards({teacherID: teacherName, sectionID: sectionName, activityID: activityName});
+    this.fetchCards(activityName);
   },
 }
 </script>

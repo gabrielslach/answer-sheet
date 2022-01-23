@@ -104,7 +104,7 @@ export default {
     );
 
     watch(teacher, (val) => {
-      store.dispatch('fetchSections', val);
+      store.dispatch('fetchSections', val.value);
       section.value = null;
     })
 
@@ -123,8 +123,8 @@ export default {
           email: email.value, 
           password: password.value,
           name: name.value, 
-          teacher: teacher.value, 
-          section: section.value
+          teacher: teacher.value.value, 
+          section: section.value.value
           });
       },
 

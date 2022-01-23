@@ -1,14 +1,10 @@
 import gql from 'graphql-tag';
 
-const getCardDeckQuery = (teacherID, sectionID, activityID) => {
+const getCardDeckQuery = (activityID) => {
     const query = gql`
-        query cardDeckCall($teacherID: String!, $sectionID: String!, $activityID: String!) {
+        query cardDeckCall($activityID: String!) {
             cardDeck: getCardDeck(
-                sheetInfo: {
-                    teacherID: $teacherID,
-                    sectionID: $sectionID,
                     activityID: $activityID
-                }
             ) {
                 CardType,
                 Description,
@@ -19,8 +15,6 @@ const getCardDeckQuery = (teacherID, sectionID, activityID) => {
         }`
 
     const variables = {
-        teacherID,
-        sectionID,
         activityID
     };
 

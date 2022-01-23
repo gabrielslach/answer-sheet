@@ -5,12 +5,17 @@ const getTeachers = db => async () => {
             
         if (snapshot.empty) {
             return 'No Data'
-        };
+        }
         
         const teachers = [];
 
         snapshot.forEach(doc => {
-            teachers.push(doc.id);
+            const data = doc.data();
+
+            teachers.push({
+                teacherName: data.teacherName, 
+                teacherID: doc.id
+            });
         });
 
         return teachers;

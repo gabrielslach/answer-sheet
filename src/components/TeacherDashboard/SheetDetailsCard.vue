@@ -1,6 +1,6 @@
 <template>
     <q-card flat bordered class="q-my-sm q-mx-lg q-pa-md">
-        <div class="text-caption float-right">No. of submissions: 18</div>
+        <div class="text-caption float-right">No. of submissions: {{noOfSubmission}}</div>
         <div class="text-subtitle1">{{ sectionName }}</div>
         <div class="text-h6">{{ activityName }}</div>
         <div class="float-right">
@@ -22,7 +22,11 @@ export default {
         activityName: {
             type: String,
             default: 'Activity Name'
-        }
+        }, 
+        noOfSubmission: {
+            type: Number,
+            default: 0
+        },
     },
     computed: {
         ...mapGetters(['getUser'])
