@@ -1,5 +1,7 @@
 const sectionName = db => async (parent) => {
     try {
+        if (!parent.sectionID) return '';
+
         const sectionDoc = await db.collection('sections')
             .doc(parent.sectionID)
             .get();

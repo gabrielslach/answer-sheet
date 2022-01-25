@@ -1,6 +1,11 @@
 const firebase = require('firebase-admin');
 
 const authHandler = async (db, authLvls = [], authToken) => {
+
+    if (authLvls.length === 0) {
+        return {isAllowed: true, userInfo: {}}
+    }
+
     try {
         const { uid, email } = await decodeToken(authToken);
         

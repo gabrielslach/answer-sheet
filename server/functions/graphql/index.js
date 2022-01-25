@@ -2,11 +2,18 @@ const { GraphQLServer } = require('graphql-yoga');
 const typeDefs = require('./schema');
 const resolvers = require('./resolvers');
 
+const firebase = require('firebase-admin');
+
 const server = new GraphQLServer({
     typeDefs,
     resolvers,
     introspection: true,
-    context: (context) => (context.request.headers)
+    context: (context) => {
+        return ({
+            ...context.request.headers,
+            db: firebase.firestore()
+        })
+    }
 });
 
 server.createHttpServer({ cors: true });

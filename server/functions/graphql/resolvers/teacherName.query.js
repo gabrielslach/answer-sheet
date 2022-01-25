@@ -1,5 +1,7 @@
 const teacherName = db => async (parent) => {
     try {
+        if (!parent.teacherID) return '';
+        
         const doc = await db.collection('teachers')
             .doc(parent.teacherID)
             .get();

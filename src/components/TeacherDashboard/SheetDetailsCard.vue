@@ -22,6 +22,10 @@ export default {
         activityName: {
             type: String,
             default: 'Activity Name'
+        },
+        activityID: {
+            type: String,
+            default: ''
         }, 
         noOfSubmission: {
             type: Number,
@@ -33,7 +37,7 @@ export default {
     },
     methods: {
         openSheet () {
-            window.open(`/sheet-manager/${this.getUser.teacherID}/${this.sectionName}/${this.activityName}/edit`)
+            window.open(`/sheet-manager/${this.activityID}/edit`)
         }
     }
 }

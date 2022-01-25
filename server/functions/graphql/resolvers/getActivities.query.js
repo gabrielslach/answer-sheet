@@ -17,10 +17,11 @@ const getActivities =  snapshot => {
             const docData = doc.data();
             const actInfo = {...activityInfo};
             Object.keys(actInfo).forEach(key => {
-                actInfo[key] = docData[key] || null;
+                if (!docData.sheetInfo) return;
+
+                actInfo[key] = docData.sheetInfo[key] || null;
             })
             actInfo.activityID = doc.id;
-            actInfo.deadlineDate = String(actInfo.deadlineDate.toMillis());
             
             activities.push(actInfo);
         })
@@ -50,7 +51,7 @@ const getActivitiesBySectionID = db => async (_, {sectionID}) => {
 const getActivitiesByTeacherID = db => async (_, {teacherID}) => {
     try {    
         const activitySnap = await db.collection('activities')
-            .where('teacherID', '==', teacherID)
+            .where('sheetInfo.teacherID', '==', teacherID)
             .get();
 
         if (activitySnap.empty) {

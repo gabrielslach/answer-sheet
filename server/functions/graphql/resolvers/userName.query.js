@@ -1,5 +1,7 @@
 const userName = db => async ({userID}) => {
     try {
+        if (!userID) return '';
+
         const doc = await db.collection('users')
             .doc(userID)
             .get();

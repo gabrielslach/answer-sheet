@@ -7,6 +7,7 @@
         :teacherName="a.teacherName"
         :sectionName="a.sectionName" 
         :activityName="a.activityName"
+        :activityID="a.activityID"
         :noOfSubmission="a.submissions.length"
         />
   </q-page>

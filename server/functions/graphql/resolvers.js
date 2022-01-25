@@ -3,8 +3,6 @@ const firebase = require('firebase-admin');
 const db = firebase.firestore();
 
 const addUser = require('./resolvers/addUser.mutation');
-const addSubmission = require('./resolvers/addSubmission.mutation');
-const addSheet = require('./resolvers/addSheet.mutation');
 
 const getUser = require('./resolvers/getUser.query');
 const getCardDeck = require('./resolvers/getCardDeck.query');
@@ -15,6 +13,7 @@ const {
     getActivitiesByTeacherID
 } = require('./resolvers/getActivities.query');
 const getSubmissions = require('./resolvers/getSubmissions.query');
+const insertMutation = require('./resolvers/insert.mutation');
 
 const submissions = require('./resolvers/submissions.query')(db);
 const sectionName = require('./resolvers/sectionName.query')(db);
@@ -33,8 +32,10 @@ const Query = {
 
 const Mutation = {
     addUser: addUser(db),
-    addSubmission: addSubmission(db),
-    addSheet: addSheet(db),
+    createSubmission: insertMutation('submissions', ['Student']),
+    createActivity: insertMutation('activities', ['Teacher']),
+    createSection: insertMutation('sections', ['Teacher']),
+    createTeacher: insertMutation('teachers', ['Teacher'])
 };
 
 const miscResolvers = {

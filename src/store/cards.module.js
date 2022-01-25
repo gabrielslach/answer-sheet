@@ -1,5 +1,5 @@
 import { apolloClient } from "../apollo";
-import addSheetQuery from "../apollo/mutations/addSheet";
+import createActivityQuery from "../apollo/mutations/createActivity";
 import getCardDeckQuery from "../apollo/queries/getCardDeck";
 
 const cardModule = {
@@ -50,11 +50,10 @@ const cardModule = {
             commit("loadCards", cardDeck);
             commit('setLoading', false);
         },
-        uploadCards: async ({state, commit}, {teacherID, sectionID, activityID}) => {
+        createActivity: async ({commit}, {teacherID, sectionName, activityName}) => {
             commit('setLoading', true);
-            const response = await apolloClient.mutate(addSheetQuery(teacherID, sectionID, activityID, state.cards));
+            await apolloClient.mutate(createActivityQuery(teacherID, sectionName, activityName));
 
-            console.log('l 54', response)
             commit('setLoading', false);
         }
     },

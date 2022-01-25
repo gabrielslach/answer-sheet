@@ -17,7 +17,7 @@ const routes = [
         component: CardDeck
     },
     {
-        path: '/sheet-manager/:teacherName/:sectionName/:activityName/:mode',
+        path: '/sheet-manager/:activityID/:mode',
         name: 'newDeck',
         component: NewCardDeck
     },

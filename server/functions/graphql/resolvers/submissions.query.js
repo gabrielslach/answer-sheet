@@ -1,5 +1,7 @@
 const submissions = db => async ({activityID}) => {
     try {
+        if (!activityID) return [];
+
         const submissionObj = {
             submissionID: '',
             userID: '',

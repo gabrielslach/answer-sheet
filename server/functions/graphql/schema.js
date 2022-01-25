@@ -45,9 +45,10 @@ const typeDefs = `
     ### SHEET INFO
 
     input SheetInfo {
-        teacherID: String
-        sectionID: String
-        activityID: String
+        teacherID: String!
+        sectionID: String!
+        activityName: String!
+        deadlineDate: String
     }
 
     ### ACTIVITIES
@@ -90,6 +91,11 @@ const typeDefs = `
         sectionName: String
     }
 
+    type InsertResult {
+        id: String
+        error: String
+    }
+
     ##############
 
     type Query {
@@ -105,8 +111,10 @@ const typeDefs = `
     }
 
     type Mutation {
-        addSheet(sheetInfo: SheetInfo, cards: [CardInput]): String!
-        addSubmission(userID: String, sheetInfo: SheetInfo, answers: [AnswerInput]): String!
+        createActivity(sheetInfo: SheetInfo!): InsertResult
+        createTeacher(teacherName: String!): InsertResult
+        createSection(sectionName: String!, teacherID: String!): InsertResult
+        createSubmission(userID: String, sheetInfo: SheetInfo, answers: [AnswerInput]): InsertResult
         addUser(userInfo: UserInput): String!
     }
 `;
