@@ -16,8 +16,8 @@
         "function": "app"
       },
       {
-          "source": "!/@(app)/**",
-          "destination": "/index.html"
+        "source": "!/@(app)/**",
+        "destination": "/index.html"
       }
     ]
   }
