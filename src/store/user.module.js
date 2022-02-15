@@ -1,4 +1,4 @@
-import { getAuth, signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { apolloClient } from "../apollo";
 import addUserQuery from "../apollo/mutations/addUser";
 import getSectionsQuery from "../apollo/queries/getSections";
@@ -47,43 +47,12 @@ const answersModule = {
         }
     },
     actions: {
-        addUserToAuth: async ({commit, dispatch}, {email, password, name, teacher, section}) => {
+        addUserToDB: async ({commit, dispatch, state}, {name, teacher, section}) => {
             try {
+                const userInfo = state.userInfo || {};
                 commit('setLoading', true);
-
-                const _uid = localStorage.getItem('uid');
-                if (_uid && _uid.length > 0) {
-                    dispatch('addUserToDB', {uid:_uid, name, teacher, section});
-                }
-
-                const auth = getAuth();
-                const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
-
-                localStorage.setItem('uid', userCredentials.user.uid)
-            
-                dispatch('addUserToDB', {uid: userCredentials.user.uid, name, teacher, section});
-            } catch (e) {
-                const error = new Object(e);
-                debugger; // eslint-disable-line no-debugger
-                if (error.code === 400) {
-                    alert('Creating user failed: this email has an existing account. Login with this email.');
-                } else if (error.code === 'auth/weak-password') {
-                    alert('Password is weak. It should have atleast 6 characters.')
-                }
-                 else {
-                    alert('Creating user failed: Network error. Please try again.');
-                }
-            }
-
-            commit('setLoading', false);
-        },
-        addUserToDB: async ({commit, dispatch}, {uid, name, teacher, section}) => {
-            try {
-                commit('setLoading', true);
-                await apolloClient.mutate(addUserQuery(name, uid, teacher, section));
-                dispatch('fetchUserInfo', uid);
-
-                localStorage.removeItem('uid');
+                await apolloClient.mutate(addUserQuery(name, userInfo.uid, teacher, section));
+                dispatch('fetchUserInfo', {uid: userInfo.uid, forceFreshFetch: true});
             } catch (error) {
                 alert('Saving user record failed, please dont close the window and try again.');
             }
@@ -95,7 +64,7 @@ const answersModule = {
             const auth = getAuth();
             signInWithEmailAndPassword(auth, email, password)
                 .then(userObj => {
-                    dispatch('fetchUserInfo', userObj.user.uid);
+                    dispatch('fetchUserInfo', {uid: userObj.user.uid});
                 }).catch( err => {
                     console.log('Auth error', err);
                     commit('setLoading', false);
@@ -109,6 +78,7 @@ const answersModule = {
 
                 localStorage.removeItem('authToken');
                 localStorage.removeItem('userInfo');
+                localStorage.removeItem('userType');
                 
                 router.push({
                     name:'auth',
@@ -146,11 +116,22 @@ const answersModule = {
             commit("setSections", sections.map(o => ({label: o.sectionName, value: o.sectionID})));
             commit('setLoading', false);
         },
-        fetchUserInfo: async ({commit}, userUID) => {
+        fetchUserInfo: async ({commit}, {uid, forceFreshFetch}) => {
             commit('setLoading', true);
-            const { data } = await apolloClient.query(getUserQuery(userUID));
+
+            const { data } = await apolloClient.query(getUserQuery(uid, forceFreshFetch));
             const { userInfo } = data;
 
+            if (!userInfo) {
+                localStorage.setItem('userInfo', JSON.stringify({uid}));
+                commit('setUserInfo', {uid});
+                router.push({
+                    name:'register',
+                    replace: true
+                });
+                return;
+            }
+            
             const routeNameEnum = {
                 Student: 'studentDashboard',
                 Teacher: 'teacherDashboard'

@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 
-const getUserQuery = (userUID) => {
+const getUserQuery = (userUID, forceFreshFetch) => {
     const query = gql`
         query getUserInfo($userUID: String!) {
             userInfo: getUser(userUID: $userUID) {
@@ -19,7 +19,8 @@ const getUserQuery = (userUID) => {
 
     return {
         query,
-        variables
+        variables,
+        fetchPolicy: forceFreshFetch ? "network-only": "cache-first"
     }
 };
 
