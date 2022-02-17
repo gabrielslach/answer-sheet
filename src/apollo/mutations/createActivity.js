@@ -1,24 +1,27 @@
 import gql from "graphql-tag";
 
-const createSheetQuery = (teacherID, sectionName, activityName) => {
+const createActivityQuery = (teacherID, sectionID, activityName) => {
     const mutation = gql`
-        mutation createSheet(
+        mutation createActivity(
             $teacherID: String!, 
-            $sectionName: String!, 
+            $sectionID: String!, 
             $activityName: String!,
             ) {
-                addSheet(
+                createActivity(
                     sheetInfo: {
                         teacherID: $teacherID,
-                        sectionName: $sectionName,
+                        sectionID: $sectionID,
                         activityName: $activityName
                     },
-            )
+            ) {
+                id,
+                error
+            }
         }`;
 
     const variables = {
         teacherID, 
-        sectionName, 
+        sectionID, 
         activityName,
     }
 
@@ -28,4 +31,4 @@ const createSheetQuery = (teacherID, sectionName, activityName) => {
     }
 };
 
-export default createSheetQuery;
+export default createActivityQuery;

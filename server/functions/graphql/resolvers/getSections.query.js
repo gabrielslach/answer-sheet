@@ -6,7 +6,7 @@ const getSections = db => async (_,{teacherID}) => {
             .get();
             
         if (snapshot.empty) {
-            return 'No Data'
+            return [];
         }
         
         const sections = [];
@@ -22,7 +22,7 @@ const getSections = db => async (_,{teacherID}) => {
 
         return sections;
     } catch(err) {
-        return 'No Data Found';
+        return [];
     }
 };
 

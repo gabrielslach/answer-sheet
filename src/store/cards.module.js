@@ -42,7 +42,6 @@ const cardModule = {
             commit("addCards", sheetData);
         },
         fetchCards: async ({commit}, activityID) => {
-            debugger; // eslint-disable-line no-debugger
             commit('setLoading', true);
             const { data } = await apolloClient.query(getCardDeckQuery(activityID));
             const { cardDeck } = data;
@@ -50,10 +49,11 @@ const cardModule = {
             commit("loadCards", cardDeck);
             commit('setLoading', false);
         },
-        createActivity: async ({commit}, {teacherID, sectionName, activityName}) => {
+        createActivity: async ({commit, dispatch}, {teacherID, sectionID, activityName}) => {
             commit('setLoading', true);
-            await apolloClient.mutate(createActivityQuery(teacherID, sectionName, activityName));
+            await apolloClient.mutate(createActivityQuery(teacherID, sectionID, activityName));
 
+            dispatch('fetchActivitiesByTeacher', teacherID);
             commit('setLoading', false);
         }
     },

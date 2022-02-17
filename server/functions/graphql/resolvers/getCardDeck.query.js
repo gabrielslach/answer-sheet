@@ -5,15 +5,15 @@ const getCardDeck = db => async (_, {activityID}) => {
             .get();
             
         if (snapshot.empty) {
-            return 'No Data'
+            return [];
         }
 
         const activityObj = snapshot.data();
-        const cards = activityObj.cards;
+        const cards = activityObj.cards || [];
 
         return cards;
     } catch(err) {
-        return 'No Data Found';
+        return [];
     }
 };
 

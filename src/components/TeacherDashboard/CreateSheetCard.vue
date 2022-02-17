@@ -1,6 +1,6 @@
 <template>
-    <q-card flat bordered class="q-ma-lg q-pa-md">
-        <q-input label='Class Name *' standout="bg-teal text-white" v-model.lazy="className" class="q-mb-md" />
+    <q-card flat bordered class="q-pa-md">
+        <q-select label='Section Name *' standout="bg-teal text-white" v-model.lazy="sectionName" :options="sections" class="q-mb-md" />
         <q-input label='Activity Name *' standout="bg-teal text-white" v-model.lazy="activityName" class="q-mb-lg" />
         <q-btn push color="primary" class='full-width' label="Create Sheet" size="lg" @click="handleCreate" />
     </q-card>
@@ -13,7 +13,7 @@ import {useStore} from 'vuex';
 
 export default {
     setup() {
-        const className = ref(null);
+        const sectionName = ref(null);
         const activityName = ref(null);
         // const router = useRouter();
 
@@ -21,17 +21,25 @@ export default {
 
         const userInfo = computed(()=>store.getters.getUser);
 
+        const teacherID = userInfo.value.uid;
+
+        store.dispatch('fetchSections', teacherID);
+
+        const sections = computed(
+            ()=>store.getters.getSections
+            );
+
         const handleCreate = () => {
-            this.uploadCards({
-                teacherID: userInfo.value.uid, 
-                sectionName: className, 
-                activityName: activityName
-                });
+            store.dispatch("createActivity", {
+                teacherID, 
+                sectionID: sectionName.value.value, 
+                activityName:activityName.value
+            });
             // router.replace({
             //     name: 'newDeck',
             //     params: {
             //         teacherName: userInfo.value.teacherID,
-            //         sectionName: className.value,
+            //         sectionName: sectionName.value,
             //         activityName: activityName.value,
             //         mode: 'new'
             //     }
@@ -39,8 +47,9 @@ export default {
         }
 
         return {
-            className,
+            sectionName,
             activityName,
+            sections,
             handleCreate
         }
     }

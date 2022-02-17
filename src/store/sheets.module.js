@@ -8,7 +8,6 @@ const sheetsModule = {
     mutations: {
         addSheets: (state, sheets) => {
             state.sheets = [
-                ...state.sheets,
                 ...sheets
             ];
         },
