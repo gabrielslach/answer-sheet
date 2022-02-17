@@ -96,6 +96,11 @@ const typeDefs = `
         error: String
     }
 
+    input ActivityInput {
+        sheetInfo: SheetInfo!
+        cards: [CardInput]!
+    }
+
     ##############
 
     type Query {
@@ -116,6 +121,7 @@ const typeDefs = `
         createSection(sectionName: String!, teacherID: String!): InsertResult
         createSubmission(userID: String, sheetInfo: SheetInfo, answers: [AnswerInput]): InsertResult
         addUser(userInfo: UserInput): String!
+        editActivity(docID: String!, documentObj: ActivityInput!): InsertResult
     }
 `;
 

@@ -14,6 +14,7 @@ const {
 } = require('./resolvers/getActivities.query');
 const getSubmissions = require('./resolvers/getSubmissions.query');
 const insertMutation = require('./resolvers/insert.mutation');
+const editMutation = require('./resolvers/edit.mutation');
 
 const submissions = require('./resolvers/submissions.query')(db);
 const sectionName = require('./resolvers/sectionName.query')(db);
@@ -35,7 +36,8 @@ const Mutation = {
     createSubmission: insertMutation('submissions', ['Student']),
     createActivity: insertMutation('activities', ['Teacher']),
     createSection: insertMutation('sections', ['Teacher']),
-    createTeacher: insertMutation('teachers', ['Teacher'])
+    createTeacher: insertMutation('teachers', ['Teacher']),
+    editActivity: editMutation('activities', ['Teacher'])
 };
 
 const miscResolvers = {
