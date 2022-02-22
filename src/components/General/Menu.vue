@@ -4,43 +4,17 @@
       <q-item
         clickable
         v-ripple
-        :active="link === 'inbox'"
-        @click="link = 'inbox'"
+        v-for="item in items"
+        :key="item.id"
+        :active="link === item.id"
+        @click="link = item.id"
         active-class="my-menu-link"
       >
         <q-item-section avatar>
-          <q-icon name="inbox" />
+          <q-icon :name="item.iconName" />
         </q-item-section>
 
-        <q-item-section>Inbox</q-item-section>
-      </q-item>
-
-      <q-item
-        clickable
-        v-ripple
-        :active="link === 'outbox'"
-        @click="link = 'outbox'"
-        active-class="my-menu-link"
-      >
-        <q-item-section avatar>
-          <q-icon name="send" />
-        </q-item-section>
-
-        <q-item-section>Outbox</q-item-section>
-      </q-item>
-
-      <q-item
-        clickable
-        v-ripple
-        :active="link === 'trash'"
-        @click="link = 'trash'"
-        active-class="my-menu-link"
-      >
-        <q-item-section avatar>
-          <q-icon name="delete" />
-        </q-item-section>
-
-        <q-item-section>Trash</q-item-section>
+        <q-item-section>{{item.label}}</q-item-section>
       </q-item>
 
       <q-separator spaced />
@@ -58,20 +32,6 @@
 
         <q-item-section>Settings</q-item-section>
       </q-item>
-
-      <q-item
-        clickable
-        v-ripple
-        :active="link === 'help'"
-        @click="link = 'help'"
-        active-class="my-menu-link"
-      >
-        <q-item-section avatar>
-          <q-icon name="help" />
-        </q-item-section>
-
-        <q-item-section>Help</q-item-section>
-      </q-item>
     </q-list>
   </div>
 </template>
@@ -82,7 +42,19 @@ import { ref } from 'vue'
 export default {
   setup () {
     return {
-      link: ref('inbox')
+      link: ref('inbox'),
+      items: ref([
+        {
+          id: 'activities',
+          iconName: 'space_dashboard',
+          label: 'My Activities'
+        },
+        {
+          id: 'sections',
+          iconName: 'school',
+          label: 'My Sections'
+        }
+      ])
     }
   }
 }

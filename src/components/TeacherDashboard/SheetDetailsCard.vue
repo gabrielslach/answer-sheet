@@ -1,5 +1,5 @@
 <template>
-    <q-card flat bordered class="q-my-sm q-mx-lg q-pa-md">
+    <q-card flat bordered class="q-my-sm q-pa-md">
         <div class="text-caption float-right">No. of submissions: {{noOfSubmission}}</div>
         <div class="text-subtitle1">{{ sectionName }}</div>
         <div class="text-h6">{{ activityName }}</div>
