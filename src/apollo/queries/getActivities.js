@@ -27,7 +27,7 @@ export const getActivitiesBySectionQuery = (sectionID) => {
     }
 };
 
-export const getActivitiesByTeacherQuery = (teacherID) => {
+export const getActivitiesByTeacherQuery = (teacherID, forceFreshFetch) => {
     const query = gql`
         query getActivitiesByTeacherQuery($teacherID: String!) {
             activities: getActivitiesByTeacherID(
@@ -50,6 +50,7 @@ export const getActivitiesByTeacherQuery = (teacherID) => {
 
     return {
         query,
-        variables
+        variables,
+        fetchPolicy: forceFreshFetch ? "network-only": "cache-first"
     }
 };

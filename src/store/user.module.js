@@ -71,21 +71,19 @@ const answersModule = {
                 })
         },
         logout: async ({commit}) => {
-            const auth = getAuth();
             try {
+                const auth = getAuth();
+                
                 await signOut(auth);
                 commit('clearUserInfo');
-
+                
                 localStorage.removeItem('authToken');
                 localStorage.removeItem('userInfo');
                 localStorage.removeItem('userType');
                 
-                router.push({
-                    name:'auth',
-                    replace: true
-                });
+                window.open('/auth', '_self');
             } catch (error) {
-                console.log('Signout error.')
+                console.log('Signout error.', error)
             }
         },
         setAuthToken: async ({commit}, authToken) => {

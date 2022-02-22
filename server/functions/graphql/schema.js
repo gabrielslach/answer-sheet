@@ -32,7 +32,8 @@ const typeDefs = `
         CardType: String!
         Description: String!
         CorrectAnswer: String
-        Choices: [String]
+        Choices: [String],
+        id: Int
     }
 
     ### ANSWER
@@ -44,7 +45,14 @@ const typeDefs = `
 
     ### SHEET INFO
 
-    input SheetInfo {
+    input SheetInfoType {
+        teacherID: String!
+        sectionID: String!
+        activityName: String!
+        deadlineDate: String
+    }
+
+    type SheetInfo {
         teacherID: String!
         sectionID: String!
         activityName: String!
@@ -76,11 +84,6 @@ const typeDefs = `
         deadlineDate: String
     }
 
-    type Activity {
-        cardDeck: [Card]!
-        submissions: [Submission]
-    }
-
     type Teacher {
         teacherID: String
         teacherName: String
@@ -97,8 +100,7 @@ const typeDefs = `
     }
 
     input ActivityInput {
-        sheetInfo: SheetInfo!
-        cards: [CardInput]!
+        cards: [CardInput]
     }
 
     ##############
@@ -112,14 +114,13 @@ const typeDefs = `
         getSubmissions(userType:String!, ID: String!): [String]!
         getActivitiesBySectionID(sectionID: String!): [ActivityInfo]!
         getActivitiesByTeacherID(teacherID: String!): [ActivityInfo]!
-        getActivity(activityID: String!): Activity
     }
 
     type Mutation {
-        createActivity(sheetInfo: SheetInfo!): InsertResult
+        createActivity(sheetInfo: SheetInfoType!): InsertResult
         createTeacher(teacherName: String!): InsertResult
         createSection(sectionName: String!, teacherID: String!): InsertResult
-        createSubmission(userID: String, sheetInfo: SheetInfo, answers: [AnswerInput]): InsertResult
+        createSubmission(userID: String, sheetInfo: SheetInfoType, answers: [AnswerInput]): InsertResult
         addUser(userInfo: UserInput): String!
         editActivity(docID: String!, documentObj: ActivityInput!): InsertResult
     }

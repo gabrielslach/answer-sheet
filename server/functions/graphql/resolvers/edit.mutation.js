@@ -1,7 +1,8 @@
 const editFx = require('../../firestore/edit.generic');
+const getFx = require('../../firestore/get.generic');
 const { authHandler, authErrorMsg } = require('./authHandler.util');
 
-const insertMutation = (collectionName, userLvlRequirement = ['Student']) => async (_, {docID, documentObj}, {db, authorization}) => {
+const editMutation = (collectionName, userLvlRequirement = ['Student']) => async (_, {docID, documentObj}, {db, authorization}) => {
     try {
         const auth = await authHandler(db, userLvlRequirement, authorization.split(' ')[1]);
 
@@ -9,8 +10,9 @@ const insertMutation = (collectionName, userLvlRequirement = ['Student']) => asy
             return(authErrorMsg);
         }
 
-        console.log(`overwriting ${collectionName} (${docID}):`, auth.userInfo, documentObj);
-        const { id } = await editFx(db)(collectionName, docID, documentObj);
+        const existingDoc = await getFx(db)(collectionName, docID);
+        console.log(`overwriting ${collectionName} (${docID}):`, auth.userInfo, existingDoc, documentObj);
+        const { id } = await editFx(db)(collectionName, docID, {...existingDoc, ...documentObj});
 
         return { id };
         
@@ -19,4 +21,4 @@ const insertMutation = (collectionName, userLvlRequirement = ['Student']) => asy
     }
 };
 
-module.exports = insertMutation;
+module.exports = editMutation;

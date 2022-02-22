@@ -35,7 +35,7 @@ export default {
     
     const userInfo = computed(()=>store.getters.getUser);
 
-    store.dispatch('fetchActivitiesByTeacher', userInfo.value.uid);
+    store.dispatch('fetchActivitiesByTeacher', {teacherID: userInfo.value.uid});
     
     const activities = computed(
       ()=>store.getters.getSheets

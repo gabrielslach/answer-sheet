@@ -1,10 +1,12 @@
 import { apolloClient } from "../apollo";
 import createActivityQuery from "../apollo/mutations/createActivity";
+import editActivityQuery from "../apollo/mutations/editActivity";
 import getCardDeckQuery from "../apollo/queries/getCardDeck";
 
 const cardModule = {
     state: () => ({
-        cards:[]
+        cards:[],
+        sheetInfo: {}
     }),
     mutations: {
         addCards: (state, newCards) => {
@@ -15,6 +17,9 @@ const cardModule = {
         loadCards: (state, cardDeck) => {
             state.cards = cardDeck;
         },
+        loadSheetInfo: (state, sheetInfo) => {
+            state.sheetInfo = sheetInfo;
+        }
     },
     actions: {
         addCardsFromSheet: ({commit}, sheetJSON) => {
@@ -46,14 +51,19 @@ const cardModule = {
             const { data } = await apolloClient.query(getCardDeckQuery(activityID));
             const { cardDeck } = data;
 
-            commit("loadCards", cardDeck);
+            commit("loadCards", cardDeck || []);
             commit('setLoading', false);
         },
         createActivity: async ({commit, dispatch}, {teacherID, sectionID, activityName}) => {
             commit('setLoading', true);
             await apolloClient.mutate(createActivityQuery(teacherID, sectionID, activityName));
 
-            dispatch('fetchActivitiesByTeacher', teacherID);
+            dispatch('fetchActivitiesByTeacher', {teacherID, forceFreshFetch: true});
+            commit('setLoading', false);
+        },
+        editActivity: async ({state, commit}, activityID) => {
+            commit('setLoading', true);
+            await apolloClient.mutate(editActivityQuery(activityID, state.cards))
             commit('setLoading', false);
         }
     },

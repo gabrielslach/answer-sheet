@@ -43,7 +43,7 @@ export default {
     ...mapGetters(['cardDeck'])
   },
   methods: {
-    ...mapActions(['upsertAnswer', 'fetchCards', 'uploadCards', 'submitAnswers']),
+    ...mapActions(['upsertAnswer', 'fetchCards', 'editActivity']),
     inputCallback (questionID) {
       const that = this;
       return function (answer) {
@@ -51,8 +51,8 @@ export default {
       }
     },
     uploadSheet () {
-      const {teacherName, sectionName, activityName} = this.$route.params;
-      this.uploadCards({teacherID: teacherName, sectionID: sectionName, activityID: activityName})
+      const {activityID} = this.$route.params;
+      this.editActivity(activityID);
     }
   },
   mounted() {

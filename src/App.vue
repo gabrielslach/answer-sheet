@@ -11,7 +11,7 @@
     <q-page-container>
       <q-dialog v-model="isLoading" full-height full-width>
         <q-inner-loading :showing="true">
-          <q-spinner-pie size="100px" color="primary" />
+          <q-spinner size="100px" color="primary" :thickness="10" />
         </q-inner-loading>
       </q-dialog>
       <router-view></router-view>

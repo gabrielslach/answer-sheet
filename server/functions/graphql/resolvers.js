@@ -28,7 +28,7 @@ const Query = {
     getSections: getSections(db),
     getActivitiesBySectionID: getActivitiesBySectionID(db),
     getActivitiesByTeacherID: getActivitiesByTeacherID(db),
-    getSubmissions: getSubmissions(db)
+    getSubmissions: getSubmissions(db),
 };
 
 const Mutation = {

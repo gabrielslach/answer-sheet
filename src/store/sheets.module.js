@@ -27,10 +27,10 @@ const sheetsModule = {
             }
         },
         
-        fetchActivitiesByTeacher: async ({commit}, teacherID) => {
+        fetchActivitiesByTeacher: async ({commit}, {teacherID, forceFreshFetch = false}) => {
             try {
                 commit('setLoading', true);
-                const sheetsObj = await apolloClient.query(getActivitiesByTeacherQuery(teacherID));
+                const sheetsObj = await apolloClient.query(getActivitiesByTeacherQuery(teacherID, forceFreshFetch));
                 const { activities } = sheetsObj.data;
 
                 commit("addSheets", activities);

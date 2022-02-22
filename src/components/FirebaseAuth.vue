@@ -1,5 +1,5 @@
 <template>
-  <section id="firebaseui-auth-container"></section>
+  <section id="firebaseui-auth-container" class="q-m-sm" ></section>
 </template>
 
 <script>
